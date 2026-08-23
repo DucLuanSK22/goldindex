@@ -49,12 +49,20 @@ document.addEventListener('DOMContentLoaded', async () => {
   setupEventListeners();
 });
 
-// Load JSON Data
+// Load JSON Data with Cache Busting & Live API Fallback
 async function loadGoldData() {
+  const headerEl = document.getElementById('lastUpdateHeader');
+  if (headerEl) headerEl.innerText = 'Đang nạp dữ liệu...';
+
   try {
-    const response = await fetch('gold_data.json');
-    if (!response.ok) throw new Error('Network response was not ok');
+    const response = await fetch('gold_data.json?v=' + Date.now());
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    
     rawGoldData = await response.json();
+
+    if (!Array.isArray(rawGoldData) || rawGoldData.length === 0) {
+      throw new Error('File dữ liệu rỗng');
+    }
 
     // Sanitize & Clean all text strings in dataset
     rawGoldData.forEach(item => {
@@ -68,7 +76,7 @@ async function loadGoldData() {
     // Populate Week Dropdown Filter
     populateWeekDropdown();
 
-    // Initial Filter: Default to All 2026 or 30 days
+    // Initial Filter
     filteredData = [...rawGoldData];
     
     // Update UI Components
@@ -78,8 +86,81 @@ async function loadGoldData() {
     calculateInvestment();
     renderTable();
   } catch (error) {
-    console.error('Error loading gold data:', error);
-    document.getElementById('lastUpdateHeader').innerText = 'Không thể tải dữ liệu';
+    console.warn('Không thể tải gold_data.json, tự động chuyển sang nạp dữ liệu trực tiếp...', error);
+    if (headerEl) headerEl.innerText = 'Đang nạp dữ liệu API...';
+    await handleLiveUpdateSilent();
+  }
+}
+
+// Silent Live Update for Initialization Fallback
+async function handleLiveUpdateSilent() {
+  try {
+    let targetDate = new Date();
+    let isoDate = targetDate.toISOString().substring(0, 10);
+    let displayDate = `${String(targetDate.getDate()).padStart(2,'0')}/${String(targetDate.getMonth()+1).padStart(2,'0')}/${targetDate.getFullYear()}`;
+
+    let apiUrl = `https://www.vang.today/api/prices?date=${isoDate}`;
+    let response = await fetch(apiUrl);
+    let apiResult = await response.json();
+
+    if (!apiResult.success || !apiResult.prices || !apiResult.prices.SJ9999 || !apiResult.prices.SJ9999.buy) {
+      targetDate.setDate(targetDate.getDate() - 1);
+      isoDate = targetDate.toISOString().substring(0, 10);
+      displayDate = `${String(targetDate.getDate()).padStart(2,'0')}/${String(targetDate.getMonth()+1).padStart(2,'0')}/${targetDate.getFullYear()}`;
+      apiUrl = `https://www.vang.today/api/prices?date=${isoDate}`;
+      response = await fetch(apiUrl);
+      apiResult = await response.json();
+    }
+
+    if (apiResult.success && apiResult.prices && apiResult.prices.SJ9999) {
+      const sjRing = apiResult.prices.SJ9999 || {};
+      const sjcBar = apiResult.prices.SJL1L10 || {};
+      const xau = apiResult.prices.XAUUSD || {};
+
+      const buyLuong = parseFloat(sjRing.buy) || 0;
+      const sellLuong = parseFloat(sjRing.sell) || 0;
+      const spreadLuong = sellLuong - buyLuong;
+      const worldUsd = parseFloat(xau.buy) || 0;
+      const worldVnd = Math.round((worldUsd * 26000) / 0.829426);
+      const spreadWorld = sellLuong - worldVnd;
+
+      const barBuy = parseFloat(sjcBar.buy) || 0;
+      const barSell = parseFloat(sjcBar.sell) || 0;
+      const updateTime = apiResult.time || '23:30';
+      const dayName = fixDayOfWeekText('', isoDate);
+
+      const newRecord = {
+        Ngay: displayDate,
+        ISO_Date: isoDate,
+        Thu: dayName,
+        Loai_Vang: "Vàng nhẫn SJC 9999",
+        Gia_Mua_VND_Luong: buyLuong,
+        Gia_Ban_VND_Luong: sellLuong,
+        Chenh_Lech_VND_Luong: spreadLuong,
+        Gia_Mua_VND_Chi: buyLuong / 10,
+        Gia_Ban_VND_Chi: sellLuong / 10,
+        Gia_The_Gioi_USD_oz: worldUsd,
+        Gia_The_Gioi_VND_Luong: worldVnd,
+        Chenh_Lech_The_Gioi: spreadWorld,
+        SJC_Mieng_Mua: barBuy,
+        SJC_Mieng_Ban: barSell,
+        Cap_Nhat_Luc: updateTime
+      };
+
+      rawGoldData = [newRecord];
+      filteredData = [...rawGoldData];
+
+      populateWeekDropdown();
+      updateDashboardMetrics();
+      renderCharts();
+      updateStatisticsSummary();
+      calculateInvestment();
+      renderTable();
+    }
+  } catch (err) {
+    console.error('Silent fallback error:', err);
+    const headerEl = document.getElementById('lastUpdateHeader');
+    if (headerEl) headerEl.innerText = 'Lỗi nạp dữ liệu';
   }
 }
 
