@@ -196,7 +196,7 @@ function setupEventListeners() {
   }
 }
 
-// Live Update Handler with Dual Fallback
+// Live Update Handler (Optimized for GitHub Pages & Localhost)
 async function handleLiveUpdate() {
   const btnSyncApi = document.getElementById('btnSyncApi');
   const originalHtml = btnSyncApi.innerHTML;
@@ -205,9 +205,11 @@ async function handleLiveUpdate() {
 
   try {
     let updateSuccess = false;
+    let successMessage = '';
+    const isLocalhost = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
 
-    // 1. Try Server Endpoint first if running on HTTP
-    if (window.location.protocol.startsWith('http')) {
+    // 1. If running on Localhost Server, call Server Node.js endpoint
+    if (isLocalhost) {
       try {
         const response = await fetch('/api/update-gold', { method: 'POST' });
         if (response.ok) {
@@ -215,25 +217,35 @@ async function handleLiveUpdate() {
           if (resData.success && resData.fullData) {
             rawGoldData = resData.fullData;
             updateSuccess = true;
+            successMessage = resData.message;
           }
         }
       } catch (e) {
-        console.warn('Server endpoint unavailable, falling back to direct client API call...', e);
+        console.warn('Server endpoint unavailable, falling back to direct client fetch...', e);
       }
     }
 
-    // 2. Direct Client-side API fetch fallback (Works for file:// and standalone local HTML)
+    // 2. Client-side direct fetch for GitHub Pages (https://ducluansk22.github.io) and file://
     if (!updateSuccess) {
-      const now = new Date();
-      const isoDate = now.toISOString().substring(0, 10);
-      const displayDate = `${String(now.getDate()).padStart(2,'0')}/${String(now.getMonth()+1).padStart(2,'0')}/${now.getFullYear()}`;
-      const dayName = fixDayOfWeekText('', isoDate);
+      let targetDate = new Date();
+      let isoDate = targetDate.toISOString().substring(0, 10);
+      let displayDate = `${String(targetDate.getDate()).padStart(2,'0')}/${String(targetDate.getMonth()+1).padStart(2,'0')}/${targetDate.getFullYear()}`;
 
-      const apiUrl = `https://www.vang.today/api/prices?date=${isoDate}`;
-      const response = await fetch(apiUrl);
-      const apiResult = await response.json();
+      let apiUrl = `https://www.vang.today/api/prices?date=${isoDate}`;
+      let response = await fetch(apiUrl);
+      let apiResult = await response.json();
 
-      if (apiResult.success && apiResult.prices) {
+      // If today's price is not available yet, try yesterday
+      if (!apiResult.success || !apiResult.prices || !apiResult.prices.SJ9999 || !apiResult.prices.SJ9999.buy) {
+        targetDate.setDate(targetDate.getDate() - 1);
+        isoDate = targetDate.toISOString().substring(0, 10);
+        displayDate = `${String(targetDate.getDate()).padStart(2,'0')}/${String(targetDate.getMonth()+1).padStart(2,'0')}/${targetDate.getFullYear()}`;
+        apiUrl = `https://www.vang.today/api/prices?date=${isoDate}`;
+        response = await fetch(apiUrl);
+        apiResult = await response.json();
+      }
+
+      if (apiResult.success && apiResult.prices && apiResult.prices.SJ9999) {
         const sjRing = apiResult.prices.SJ9999 || {};
         const sjcBar = apiResult.prices.SJL1L10 || {};
         const xau = apiResult.prices.XAUUSD || {};
@@ -247,7 +259,8 @@ async function handleLiveUpdate() {
 
         const barBuy = parseFloat(sjcBar.buy) || 0;
         const barSell = parseFloat(sjcBar.sell) || 0;
-        const updateTime = apiResult.time || `${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
+        const updateTime = apiResult.time || `${String(new Date().getHours()).padStart(2,'0')}:${String(new Date().getMinutes()).padStart(2,'0')}`;
+        const dayName = fixDayOfWeekText('', isoDate);
 
         const newRecord = {
           Ngay: displayDate,
@@ -275,6 +288,7 @@ async function handleLiveUpdate() {
         }
 
         updateSuccess = true;
+        successMessage = `Đã cập nhật trực tiếp dữ liệu giá vàng ngày ${displayDate} (${updateTime})!`;
       }
     }
 
@@ -294,14 +308,14 @@ async function handleLiveUpdate() {
       calculateInvestment();
       renderTable();
 
-      alert(`⚡ Đã cập nhật thành công dữ liệu giá vàng mới nhất!`);
+      alert(`⚡ ${successMessage}`);
     } else {
-      alert(`❌ Không thể lấy dữ liệu từ API. Vui lòng kiểm tra lại kết nối Internet.`);
+      alert(`❌ Nhà đài chưa công bố giá vàng mới hơn. Dữ liệu hiện tại đã là mới nhất!`);
     }
 
   } catch (err) {
     console.error('Live update error:', err);
-    alert(`❌ Lỗi kết nối: ${err.message}`);
+    alert(`❌ Lỗi kết nối API: ${err.message || 'Không thể lấy dữ liệu mới'}`);
   } finally {
     btnSyncApi.innerHTML = originalHtml;
     btnSyncApi.disabled = false;
