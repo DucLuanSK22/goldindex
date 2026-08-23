@@ -290,6 +290,41 @@ function setupEventListeners() {
   if (btnSyncApi) {
     btnSyncApi.addEventListener('click', handleLiveUpdate);
   }
+
+  document.getElementById('inputQuantity').addEventListener('input', calculateInvestment);
+  document.getElementById('unitSelect').addEventListener('change', calculateInvestment);
+
+  // Chart Dataset Visibility Checkboxes
+  const chkRing = document.getElementById('chkRing');
+  const chkBar = document.getElementById('chkBar');
+  const chkWorld = document.getElementById('chkWorld');
+
+  if (chkRing) {
+    chkRing.addEventListener('change', (e) => {
+      if (mainChartInstance) {
+        mainChartInstance.setDatasetVisibility(0, e.target.checked);
+        mainChartInstance.update();
+      }
+    });
+  }
+
+  if (chkBar) {
+    chkBar.addEventListener('change', (e) => {
+      if (mainChartInstance) {
+        mainChartInstance.setDatasetVisibility(1, e.target.checked);
+        mainChartInstance.update();
+      }
+    });
+  }
+
+  if (chkWorld) {
+    chkWorld.addEventListener('change', (e) => {
+      if (mainChartInstance) {
+        mainChartInstance.setDatasetVisibility(2, e.target.checked);
+        mainChartInstance.update();
+      }
+    });
+  }
 }
 
 // Live Update Handler (Optimized for GitHub Pages & Localhost)
@@ -415,42 +450,6 @@ async function handleLiveUpdate() {
   } finally {
     btnSyncApi.innerHTML = originalHtml;
     btnSyncApi.disabled = false;
-  }
-}
-
-  document.getElementById('inputQuantity').addEventListener('input', calculateInvestment);
-  document.getElementById('unitSelect').addEventListener('change', calculateInvestment);
-
-  // Chart Dataset Visibility Checkboxes
-  const chkRing = document.getElementById('chkRing');
-  const chkBar = document.getElementById('chkBar');
-  const chkWorld = document.getElementById('chkWorld');
-
-  if (chkRing) {
-    chkRing.addEventListener('change', (e) => {
-      if (mainChartInstance) {
-        mainChartInstance.setDatasetVisibility(0, e.target.checked);
-        mainChartInstance.update();
-      }
-    });
-  }
-
-  if (chkBar) {
-    chkBar.addEventListener('change', (e) => {
-      if (mainChartInstance) {
-        mainChartInstance.setDatasetVisibility(1, e.target.checked);
-        mainChartInstance.update();
-      }
-    });
-  }
-
-  if (chkWorld) {
-    chkWorld.addEventListener('change', (e) => {
-      if (mainChartInstance) {
-        mainChartInstance.setDatasetVisibility(2, e.target.checked);
-        mainChartInstance.update();
-      }
-    });
   }
 }
 
