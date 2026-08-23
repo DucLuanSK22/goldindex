@@ -52,22 +52,36 @@ powershell -ExecutionPolicy Bypass -File Update_World_Gold.ps1
 
 ---
 
-## 📂 Cấu Trúc Dự Án
+## 📂 Cấu Trúc Thư Mục Tinh Gọn (Clean Architecture)
 
 ```
 Gold/
-├── index.html                           # Giao diện Web Dashboard
-├── styles.css                           # Styling Dark Metallic & Glassmorphic
-├── app.js                               # Logic xử lý chỉ số, Chart.js & Table
-├── gold_data.json                       # Bộ dữ liệu JSON nạp cho trang Web
-├── server.js                            # Static HTTP Server Node.js
-├── Update_World_Gold.ps1                # Script PowerShell tự động cập nhật API & Excel/CSV
-├── Collect_SJC_Gold.ps1                 # Script thu thập giá vàng SJC
-├── Fix_Encoding.ps1                     # Script chuẩn hóa mã hóa Unicode UTF-8
-├── Theo dõi giá vàng.xlsx               # File Excel theo dõi chính của người dùng
-├── Gia_Vang_Nhan_SJC_2026.csv           # File CSV mã hóa UTF-8 BOM
-├── Gia_Vang_Nhan_SJC_2026_Excel_UTF16.csv# File CSV UTF-16LE dành cho MS Excel
-└── Gia_Vang_Nhan_SJC_2026.xls           # File Excel HTML Spreadsheet
+├── 🌐 Nhóm Web Application (Bắt buộc)
+│   ├── index.html                      # Giao diện Web Dashboard chính
+│   ├── styles.css                      # Styling Dark Gold Metallic & Glassmorphic
+│   ├── app.js                          # Logic xử lý chỉ số, Chart.js & Table
+│   ├── gold_data.json                  # Bộ dữ liệu JSON nạp cho trang Web
+│   └── server.js                       # Static HTTP Server Node.js (Localhost 8080)
+│
+├── ⚙️ Nhóm Script Tự Động Hóa (Bắt buộc Backend)
+│   ├── Update_World_Gold.ps1           # Kịch bản chính tự động thu thập API & đồng bộ
+│   ├── Consolidate_Excel.ps1           # Script gộp Excel đa Sheet
+│   └── Fix_Encoding.ps1                # Script phụ hỗ trợ chuẩn hóa UTF-8
+│
+├── 📊 Nhóm Tệp Dữ Liệu Chính (Bắt buộc Data)
+│   ├── Theo dõi giá vàng.xlsx          # Tệp Excel theo dõi cá nhân của bạn
+│   ├── Gia_Vang_Nhan_SJC_2026.xlsx      # Tệp Excel hợp nhất 3 Sheets (Theo tuần, Theo tháng, Raw)
+│   └── Gia_Vang_Nhan_SJC_2026.csv      # Tệp CSV UTF-8 nhẹ dùng cho máy tính đọc/Cache
+│
+└── 📁 legacy/                          # Thư mục lưu trữ các file cũ/dư thừa (Không cần thiết)
+    ├── Collect_SJC_Gold.ps1
+    ├── Fix_Excel_Font.ps1
+    ├── Gia_Vang_Nhan_SJC_2026.xls
+    ├── Gia_Vang_Nhan_SJC_2026_Excel_UTF16.csv
+    ├── Gia_Vang_Nhan_SJC_2026_xuly.xlsx
+    ├── Copy of Gia_Vang_Nhan_SJC_2026_xuly.xlsx
+    ├── collect_sjc_gold_ring.py
+    └── test_world_gold.ps1
 ```
 
 ---
