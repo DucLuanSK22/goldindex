@@ -37,6 +37,80 @@
   --transition-fast: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+/* Light Theme Variables & Overrides */
+body.light-theme {
+  --bg-dark: #F1F5F9;
+  --bg-card: rgba(255, 255, 255, 0.92);
+  --bg-card-hover: rgba(255, 255, 255, 1);
+  --border-color: rgba(212, 175, 55, 0.3);
+  --border-color-glow: rgba(184, 134, 11, 0.5);
+
+  --text-main: #0F172A;
+  --text-muted: #475569;
+  --text-dim: #64748B;
+
+  --shadow-card: 0 10px 25px -5px rgba(0, 0, 0, 0.08), 0 0 15px rgba(212, 175, 55, 0.1);
+  --shadow-glow: 0 0 20px rgba(212, 175, 55, 0.2);
+}
+
+body.light-theme .app-header {
+  background: rgba(255, 255, 255, 0.85);
+  border-bottom: 1px solid rgba(212, 175, 55, 0.25);
+}
+
+body.light-theme .main-price {
+  color: #0F172A;
+}
+
+body.light-theme .chart-card-header h3 {
+  color: #0F172A;
+}
+
+body.light-theme .brand-text h1 {
+  color: #0F172A;
+}
+
+body.light-theme select,
+body.light-theme input[type="text"],
+body.light-theme input[type="number"],
+body.light-theme input[type="date"] {
+  background: rgba(255, 255, 255, 0.95);
+  color: #0F172A;
+  border-color: rgba(0, 0, 0, 0.15);
+}
+
+body.light-theme .table-responsive table tbody tr {
+  background: rgba(255, 255, 255, 0.6);
+  color: #0F172A;
+}
+
+body.light-theme .table-responsive table tbody tr:nth-child(even) {
+  background: rgba(248, 250, 252, 0.9);
+}
+
+body.light-theme .table-responsive table thead th {
+  background: rgba(241, 245, 249, 0.95);
+  color: #0F172A;
+  border-bottom: 2px solid rgba(212, 175, 55, 0.3);
+}
+
+body.light-theme .chart-toggles,
+body.light-theme .custom-date-range-box {
+  background: rgba(255, 255, 255, 0.85);
+  border: 1px solid rgba(212, 175, 55, 0.25);
+}
+
+body.light-theme .page-btn {
+  background: rgba(255, 255, 255, 0.8);
+  color: #0F172A;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+body.light-theme .page-btn.active {
+  background: var(--gold-gradient);
+  color: #000;
+}
+
 /* Reset & Base Styles */
 * {
   box-sizing: border-box;

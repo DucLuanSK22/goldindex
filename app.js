@@ -56,9 +56,27 @@ const EMBEDDED_GOLD_FALLBACK = [
 
 // Initialize Application
 document.addEventListener('DOMContentLoaded', async () => {
+  initTheme();
   await loadGoldData();
   setupEventListeners();
 });
+
+// Initialize Light / Dark Theme from localStorage
+function initTheme() {
+  const savedTheme = localStorage.getItem('gold_theme');
+  const themeIcon = document.getElementById('themeIcon');
+  const themeText = document.getElementById('themeText');
+
+  if (savedTheme === 'light') {
+    document.body.classList.add('light-theme');
+    if (themeIcon) themeIcon.className = 'fa-solid fa-sun';
+    if (themeText) themeText.textContent = 'Chủ Đề Sáng';
+  } else {
+    document.body.classList.remove('light-theme');
+    if (themeIcon) themeIcon.className = 'fa-solid fa-moon';
+    if (themeText) themeText.textContent = 'Chủ Đề Tối';
+  }
+}
 
 // Load JSON Data with Instant Embedded Fallback & Async Fetch
 async function loadGoldData() {
@@ -353,6 +371,29 @@ function setupEventListeners() {
       updateAllViews();
     });
   }
+
+  // Theme Switcher Toggle (Light / Dark Mode)
+  const btnThemeToggle = document.getElementById('btnThemeToggle');
+  if (btnThemeToggle) {
+    btnThemeToggle.addEventListener('click', () => {
+      const isLight = document.body.classList.toggle('light-theme');
+      const themeIcon = document.getElementById('themeIcon');
+      const themeText = document.getElementById('themeText');
+
+      if (isLight) {
+        if (themeIcon) themeIcon.className = 'fa-solid fa-sun';
+        if (themeText) themeText.textContent = 'Chủ Đề Sáng';
+        localStorage.setItem('gold_theme', 'light');
+      } else {
+        if (themeIcon) themeIcon.className = 'fa-solid fa-moon';
+        if (themeText) themeText.textContent = 'Chủ Đề Tối';
+        localStorage.setItem('gold_theme', 'dark');
+      }
+
+      // Re-render charts so grid colors adapt
+      renderCharts();
+    });
+  }
 }
 
 // Live Update Handler (Optimized for GitHub Pages & Localhost)
@@ -541,6 +582,13 @@ function updateAllViews() {
 
 // Render Chart.js Visualizations
 function renderCharts() {
+  const isLight = document.body.classList.contains('light-theme');
+  const tickColor = isLight ? '#475569' : '#9CA3AF';
+  const gridColor = isLight ? 'rgba(0, 0, 0, 0.08)' : 'rgba(255, 255, 255, 0.05)';
+  const tooltipBg = isLight ? 'rgba(255, 255, 255, 0.98)' : 'rgba(9, 13, 22, 0.95)';
+  const tooltipTitle = isLight ? '#B8860B' : '#F5D77F';
+  const tooltipBody = isLight ? '#0F172A' : '#F3F4F6';
+
   const labels = filteredData.map(d => d.Ngay);
   const ringPrices = filteredData.map(d => d.Gia_Ban_VND_Luong);
   const barPrices = filteredData.map(d => d.SJC_Mieng_Ban);
@@ -601,10 +649,10 @@ function renderCharts() {
         legend: { display: false },
         tooltip: {
           padding: 14,
-          backgroundColor: 'rgba(9, 13, 22, 0.95)',
-          titleColor: '#F5D77F',
+          backgroundColor: tooltipBg,
+          titleColor: tooltipTitle,
           titleFont: { size: 14, weight: 'bold' },
-          bodyColor: '#F3F4F6',
+          bodyColor: tooltipBody,
           bodyFont: { size: 13 },
           footerColor: '#10B981',
           footerFont: { size: 13, weight: 'bold' },
@@ -630,14 +678,14 @@ function renderCharts() {
       },
       scales: {
         x: {
-          grid: { color: 'rgba(255, 255, 255, 0.05)' },
-          ticks: { color: '#9CA3AF', maxRotation: 0 }
+          grid: { display: false },
+          ticks: { color: tickColor, maxTicksLimit: 12 }
         },
         y: {
-          grid: { color: 'rgba(255, 255, 255, 0.05)' },
+          grid: { color: gridColor },
           ticks: {
-            color: '#9CA3AF',
-            callback: (val) => (val / 1000000).toFixed(1) + ' Tr'
+            color: tickColor,
+            callback: (val) => (val / 1000000).toFixed(0) + ' Tr'
           }
         }
       }
@@ -684,17 +732,20 @@ function renderCharts() {
       plugins: {
         legend: { display: false },
         tooltip: {
+          backgroundColor: tooltipBg,
+          titleColor: tooltipTitle,
+          bodyColor: tooltipBody,
           callbacks: {
             label: (ctx) => `Chênh lệch: +${formatVND(ctx.raw)} đ/lượng`
           }
         }
       },
       scales: {
-        x: { grid: { display: false }, ticks: { color: '#9CA3AF' } },
+        x: { grid: { display: false }, ticks: { color: tickColor } },
         y: {
-          grid: { color: 'rgba(255, 255, 255, 0.05)' },
+          grid: { color: gridColor },
           ticks: {
-            color: '#9CA3AF',
+            color: tickColor,
             callback: (val) => (val / 1000000).toFixed(1) + ' Tr'
           }
         }
@@ -725,17 +776,20 @@ function renderCharts() {
       plugins: {
         legend: { display: false },
         tooltip: {
+          backgroundColor: tooltipBg,
+          titleColor: tooltipTitle,
+          bodyColor: tooltipBody,
           callbacks: {
             label: (ctx) => `Chênh lệch Mua-Bán: ${formatVND(ctx.raw)} đ`
           }
         }
       },
       scales: {
-        x: { grid: { display: false }, ticks: { color: '#9CA3AF' } },
+        x: { grid: { display: false }, ticks: { color: tickColor } },
         y: {
-          grid: { color: 'rgba(255, 255, 255, 0.05)' },
+          grid: { color: gridColor },
           ticks: {
-            color: '#9CA3AF',
+            color: tickColor,
             callback: (val) => (val / 1000000).toFixed(1) + ' Tr'
           }
         }
