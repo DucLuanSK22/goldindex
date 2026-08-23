@@ -429,6 +429,61 @@ body {
   border-color: var(--gold-light);
 }
 
+/* Custom Date Range Picker Box */
+.custom-date-range-box {
+  margin-top: 16px;
+  padding: 16px 20px;
+  background: rgba(0, 0, 0, 0.45);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  animation: fadeIn 0.3s ease;
+}
+
+.date-picker-group {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.date-input-field {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.date-input-field label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--gold-light);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.date-input-field input[type="date"] {
+  background: rgba(15, 23, 42, 0.9);
+  border: 1px solid var(--border-color);
+  color: #FFF;
+  padding: 8px 12px;
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  font-family: var(--font-body);
+  outline: none;
+  transition: var(--transition-fast);
+  cursor: pointer;
+}
+
+.date-input-field input[type="date"]:focus {
+  border-color: var(--gold-primary);
+  box-shadow: 0 0 10px rgba(212, 175, 55, 0.25);
+}
+
+.btn-sm {
+  padding: 8px 16px;
+  font-size: 13px;
+}
+
 /* Charts Grid */
 .charts-grid {
   display: grid;

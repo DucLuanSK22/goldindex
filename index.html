@@ -148,6 +148,9 @@
           <button class="filter-btn" data-period="90">3 Tháng</button>
           <button class="filter-btn" data-period="365">1 Năm</button>
           <button class="filter-btn active" data-period="all">Từ 2016 đến nay</button>
+          <button class="filter-btn" data-period="custom" id="btnCustomDateRange">
+            <i class="fa-solid fa-calendar-week"></i> Tùy Chọn Ngày
+          </button>
         </div>
 
         <div class="dropdown-filters">
@@ -173,6 +176,24 @@
             </select>
           </div>
         </div>
+      </div>
+
+      <!-- Custom Date Range Picker Container -->
+      <div class="custom-date-range-box" id="customDateRangeBox" style="display: none;">
+        <div class="date-picker-group">
+          <div class="date-input-field">
+            <label for="startDatePicker"><i class="fa-solid fa-calendar-day"></i> Từ Ngày:</label>
+            <input type="date" id="startDatePicker" value="2026-01-01" min="2016-01-01">
+          </div>
+          <div class="date-input-field">
+            <label for="endDatePicker"><i class="fa-solid fa-calendar-day"></i> Đến Ngày:</label>
+            <input type="date" id="endDatePicker" value="2026-08-23" min="2016-01-01">
+          </div>
+          <button class="btn btn-gold btn-sm" id="btnApplyCustomDate">
+            <i class="fa-solid fa-filter"></i> Áp Dụng Lọc Khoảng Ngày
+          </button>
+        </div>
+      </div>
       </div>
     </section>
 

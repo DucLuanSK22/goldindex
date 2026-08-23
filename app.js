@@ -325,6 +325,34 @@ function setupEventListeners() {
       }
     });
   }
+
+  // Apply Custom Date Range Filter
+  const btnApplyCustomDate = document.getElementById('btnApplyCustomDate');
+  if (btnApplyCustomDate) {
+    btnApplyCustomDate.addEventListener('click', () => {
+      const startDate = document.getElementById('startDatePicker').value;
+      const endDate = document.getElementById('endDatePicker').value;
+
+      if (!startDate || !endDate) {
+        alert('Vui lòng chọn đầy đủ từ ngày và đến ngày.');
+        return;
+      }
+
+      if (startDate > endDate) {
+        alert('Ngày bắt đầu không thể lớn hơn ngày kết thúc.');
+        return;
+      }
+
+      filteredData = rawGoldData.filter(item => {
+        return item.ISO_Date >= startDate && item.ISO_Date <= endDate;
+      });
+
+      document.getElementById('monthSelect').value = 'all';
+      document.getElementById('weekSelect').value = 'all';
+
+      updateAllViews();
+    });
+  }
 }
 
 // Live Update Handler (Optimized for GitHub Pages & Localhost)
@@ -455,6 +483,15 @@ async function handleLiveUpdate() {
 
 // Filter data by time period
 function filterDataByPeriod(period) {
+  const customBox = document.getElementById('customDateRangeBox');
+
+  if (period === 'custom') {
+    if (customBox) customBox.style.display = 'block';
+    return; // Wait for user to click Apply button
+  } else {
+    if (customBox) customBox.style.display = 'none';
+  }
+
   if (period === 'all') {
     filteredData = [...rawGoldData];
   } else {
