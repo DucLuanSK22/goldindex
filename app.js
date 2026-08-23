@@ -189,51 +189,124 @@ function setupEventListeners() {
 
   document.getElementById('btnExport').addEventListener('click', exportToCSV);
 
-  // Live API Sync Button
+  // Live API Sync Button (Supports both Server HTTP & Direct file:// protocols)
   const btnSyncApi = document.getElementById('btnSyncApi');
   if (btnSyncApi) {
-    btnSyncApi.addEventListener('click', async () => {
-      const originalHtml = btnSyncApi.innerHTML;
-      btnSyncApi.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Đang Cập Nhật...';
-      btnSyncApi.disabled = true;
+    btnSyncApi.addEventListener('click', handleLiveUpdate);
+  }
+}
 
+// Live Update Handler with Dual Fallback
+async function handleLiveUpdate() {
+  const btnSyncApi = document.getElementById('btnSyncApi');
+  const originalHtml = btnSyncApi.innerHTML;
+  btnSyncApi.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Đang Cập Nhật...';
+  btnSyncApi.disabled = true;
+
+  try {
+    let updateSuccess = false;
+
+    // 1. Try Server Endpoint first if running on HTTP
+    if (window.location.protocol.startsWith('http')) {
       try {
         const response = await fetch('/api/update-gold', { method: 'POST' });
-        const resData = await response.json();
-
-        if (resData.success && resData.fullData) {
-          rawGoldData = resData.fullData;
-          
-          // Sanitize & Clean all text strings in dataset
-          rawGoldData.forEach(item => {
-            item.Loai_Vang = 'Vàng nhẫn SJC 9999';
-            item.Thu = fixDayOfWeekText(item.Thu, item.ISO_Date);
-          });
-
-          // Sort chronologically
-          rawGoldData.sort((a, b) => new Date(a.ISO_Date) - new Date(b.ISO_Date));
-          filteredData = [...rawGoldData];
-
-          // Real-time UI Updates without F5 reload
-          updateDashboardMetrics();
-          renderCharts();
-          updateStatisticsSummary();
-          calculateInvestment();
-          renderTable();
-
-          alert(`⚡ ${resData.message}`);
-        } else {
-          alert(`❌ Lỗi cập nhật: ${resData.message || 'Không có phản hồi'}`);
+        if (response.ok) {
+          const resData = await response.json();
+          if (resData.success && resData.fullData) {
+            rawGoldData = resData.fullData;
+            updateSuccess = true;
+          }
         }
-      } catch (err) {
-        console.error('API Sync Error:', err);
-        alert('❌ Không thể kết nối tới Server API.');
-      } finally {
-        btnSyncApi.innerHTML = originalHtml;
-        btnSyncApi.disabled = false;
+      } catch (e) {
+        console.warn('Server endpoint unavailable, falling back to direct client API call...', e);
       }
-    });
+    }
+
+    // 2. Direct Client-side API fetch fallback (Works for file:// and standalone local HTML)
+    if (!updateSuccess) {
+      const now = new Date();
+      const isoDate = now.toISOString().substring(0, 10);
+      const displayDate = `${String(now.getDate()).padStart(2,'0')}/${String(now.getMonth()+1).padStart(2,'0')}/${now.getFullYear()}`;
+      const dayName = fixDayOfWeekText('', isoDate);
+
+      const apiUrl = `https://www.vang.today/api/prices?date=${isoDate}`;
+      const response = await fetch(apiUrl);
+      const apiResult = await response.json();
+
+      if (apiResult.success && apiResult.prices) {
+        const sjRing = apiResult.prices.SJ9999 || {};
+        const sjcBar = apiResult.prices.SJL1L10 || {};
+        const xau = apiResult.prices.XAUUSD || {};
+
+        const buyLuong = parseFloat(sjRing.buy) || 0;
+        const sellLuong = parseFloat(sjRing.sell) || 0;
+        const spreadLuong = sellLuong - buyLuong;
+        const worldUsd = parseFloat(xau.buy) || 0;
+        const worldVnd = Math.round((worldUsd * 26000) / 0.829426);
+        const spreadWorld = sellLuong - worldVnd;
+
+        const barBuy = parseFloat(sjcBar.buy) || 0;
+        const barSell = parseFloat(sjcBar.sell) || 0;
+        const updateTime = apiResult.time || `${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
+
+        const newRecord = {
+          Ngay: displayDate,
+          ISO_Date: isoDate,
+          Thu: dayName,
+          Loai_Vang: "Vàng nhẫn SJC 9999",
+          Gia_Mua_VND_Luong: buyLuong,
+          Gia_Ban_VND_Luong: sellLuong,
+          Chenh_Lech_VND_Luong: spreadLuong,
+          Gia_Mua_VND_Chi: buyLuong / 10,
+          Gia_Ban_VND_Chi: sellLuong / 10,
+          Gia_The_Gioi_USD_oz: worldUsd,
+          Gia_The_Gioi_VND_Luong: worldVnd,
+          Chenh_Lech_The_Gioi: spreadWorld,
+          SJC_Mieng_Mua: barBuy,
+          SJC_Mieng_Ban: barSell,
+          Cap_Nhat_Luc: updateTime
+        };
+
+        const existingIdx = rawGoldData.findIndex(item => item.ISO_Date === isoDate);
+        if (existingIdx >= 0) {
+          rawGoldData[existingIdx] = newRecord;
+        } else {
+          rawGoldData.push(newRecord);
+        }
+
+        updateSuccess = true;
+      }
+    }
+
+    if (updateSuccess) {
+      // Clean and sort data
+      rawGoldData.forEach(item => {
+        item.Loai_Vang = 'Vàng nhẫn SJC 9999';
+        item.Thu = fixDayOfWeekText(item.Thu, item.ISO_Date);
+      });
+      rawGoldData.sort((a, b) => new Date(a.ISO_Date) - new Date(b.ISO_Date));
+      filteredData = [...rawGoldData];
+
+      // Update UI components in real-time without reloading
+      updateDashboardMetrics();
+      renderCharts();
+      updateStatisticsSummary();
+      calculateInvestment();
+      renderTable();
+
+      alert(`⚡ Đã cập nhật thành công dữ liệu giá vàng mới nhất!`);
+    } else {
+      alert(`❌ Không thể lấy dữ liệu từ API. Vui lòng kiểm tra lại kết nối Internet.`);
+    }
+
+  } catch (err) {
+    console.error('Live update error:', err);
+    alert(`❌ Lỗi kết nối: ${err.message}`);
+  } finally {
+    btnSyncApi.innerHTML = originalHtml;
+    btnSyncApi.disabled = false;
   }
+}
 
   document.getElementById('inputQuantity').addEventListener('input', calculateInvestment);
   document.getElementById('unitSelect').addEventListener('change', calculateInvestment);
