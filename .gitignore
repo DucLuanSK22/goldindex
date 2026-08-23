@@ -1,0 +1,9 @@
+# Temporary Excel lock files
+~$*.xlsx
+~$*.xls
+
+# Node modules & OS temp files
+node_modules/
+.DS_Store
+Thumbs.db
+*.tmp

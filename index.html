@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bảng Theo Dõi & Biểu Đồ Giá Vàng Việt Nam & Thế Giới 2026</title>
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  
+  <!-- CSS Styles -->
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="dark-theme">
+
+  <!-- Header -->
+  <header class="app-header">
+    <div class="header-container">
+      <div class="brand">
+        <div class="brand-logo">
+          <i class="fa-solid fa-coins"></i>
+        </div>
+        <div class="brand-text">
+          <h1>GOLD INDEX <span>2026</span></h1>
+          <p>Hệ Thống Phân Tích & Theo Dõi Giá Vàng SJC & Thế Giới</p>
+        </div>
+      </div>
+      
+      <div class="header-actions">
+        <div class="live-status">
+          <span class="pulse-dot"></span>
+          <span>Cập nhật mới nhất: <strong id="lastUpdateHeader">Loading...</strong></span>
+        </div>
+        <button id="btnRefresh" class="btn btn-secondary">
+          <i class="fa-solid fa-rotate-right"></i> Làm mới
+        </button>
+        <button id="btnExport" class="btn btn-primary">
+          <i class="fa-solid fa-file-arrow-down"></i> Xuất File CSV
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="main-container">
+
+    <!-- Metrics Bar / Indices Overview -->
+    <section class="metrics-grid">
+      <!-- Card 1: Vàng Nhẫn SJC -->
+      <div class="metric-card gold-glow">
+        <div class="card-header">
+          <div class="icon-wrapper ring-icon">
+            <i class="fa-solid fa-ring"></i>
+          </div>
+          <span class="badge">SJC 9999</span>
+        </div>
+        <div class="card-body">
+          <span class="metric-title">VÀNG NHẪN SJC 9999</span>
+          <div class="metric-value-group">
+            <span class="main-price" id="ringSellPrice">---</span>
+            <span class="unit">đ/lượng</span>
+          </div>
+          <div class="price-sub-info">
+            <span>Mua vào: <strong id="ringBuyPrice">---</strong></span>
+            <span class="change-tag" id="ringChange">---</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 2: Vàng Miếng SJC -->
+      <div class="metric-card">
+        <div class="card-header">
+          <div class="icon-wrapper bar-icon">
+            <i class="fa-solid fa-cubes"></i>
+          </div>
+          <span class="badge">SJC Miếng</span>
+        </div>
+        <div class="card-body">
+          <span class="metric-title">VÀNG MIẾNG SJC (L1-L10)</span>
+          <div class="metric-value-group">
+            <span class="main-price" id="barSellPrice">---</span>
+            <span class="unit">đ/lượng</span>
+          </div>
+          <div class="price-sub-info">
+            <span>Mua vào: <strong id="barBuyPrice">---</strong></span>
+            <span class="change-tag" id="barChange">---</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 3: Vàng Thế Giới -->
+      <div class="metric-card">
+        <div class="card-header">
+          <div class="icon-wrapper world-icon">
+            <i class="fa-solid fa-globe"></i>
+          </div>
+          <span class="badge">XAU/USD</span>
+        </div>
+        <div class="card-body">
+          <span class="metric-title">GIÁ VÀNG THẾ GIỚI</span>
+          <div class="metric-value-group">
+            <span class="main-price" id="worldUsdPrice">---</span>
+            <span class="unit">USD/oz</span>
+          </div>
+          <div class="price-sub-info">
+            <span>Quy đổi: <strong id="worldVndPrice">---</strong> đ/lượng</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 4: Độ Chênh Lệch -->
+      <div class="metric-card">
+        <div class="card-header">
+          <div class="icon-wrapper spread-icon">
+            <i class="fa-solid fa-scale-balanced"></i>
+          </div>
+          <span class="badge">Chênh Lệch</span>
+        </div>
+        <div class="card-body">
+          <span class="metric-title">CHÊNH LỆCH SJC VS THẾ GIỚI</span>
+          <div class="metric-value-group">
+            <span class="main-price" id="spreadPrice">---</span>
+            <span class="unit">đ/lượng</span>
+          </div>
+          <div class="price-sub-info">
+            <span id="spreadPercentText">---</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Controls & Filter Toolbar -->
+    <section class="toolbar-section">
+      <div class="filter-group">
+        <div class="time-filter-buttons">
+          <button class="filter-btn active" data-period="7">7 Ngày</button>
+          <button class="filter-btn" data-period="30">30 Ngày</button>
+          <button class="filter-btn" data-period="90">3 Tháng</button>
+          <button class="filter-btn" data-period="all">Tất Cả 2026</button>
+        </div>
+
+        <div class="dropdown-filters">
+          <div class="select-box">
+            <i class="fa-solid fa-calendar-week"></i>
+            <select id="weekSelect">
+              <option value="all">Tất cả các tuần</option>
+            </select>
+          </div>
+
+          <div class="select-box">
+            <i class="fa-solid fa-calendar-days"></i>
+            <select id="monthSelect">
+              <option value="all">Tất cả các tháng</option>
+              <option value="01">Tháng 1</option>
+              <option value="02">Tháng 2</option>
+              <option value="03">Tháng 3</option>
+              <option value="04">Tháng 4</option>
+              <option value="05">Tháng 5</option>
+              <option value="06">Tháng 6</option>
+              <option value="07">Tháng 7</option>
+              <option value="08">Tháng 8</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Charts Grid -->
+    <section class="charts-grid">
+      <!-- Chart 1: Main Trend Comparison -->
+      <div class="chart-card full-width">
+        <div class="chart-card-header">
+          <div>
+            <h3><i class="fa-solid fa-chart-line"></i> Biểu Đồ Diễn Biến Giá Vàng 2026</h3>
+            <p>So sánh Giá Vàng Nhẫn SJC 9999, Vàng Miếng SJC và Giá Vàng Thế Giới Quy Đổi (VNĐ/lượng)</p>
+          </div>
+          <div class="chart-toggles">
+            <label class="custom-checkbox">
+              <input type="checkbox" id="chkRing" checked>
+              <span class="checkmark ring-check"></span>
+              <span class="label-text">Vàng Nhẫn SJC 9999</span>
+            </label>
+            <label class="custom-checkbox">
+              <input type="checkbox" id="chkBar" checked>
+              <span class="checkmark bar-check"></span>
+              <span class="label-text">Vàng Miếng SJC</span>
+            </label>
+            <label class="custom-checkbox">
+              <input type="checkbox" id="chkWorld" checked>
+              <span class="checkmark world-check"></span>
+              <span class="label-text">Vàng Thế Giới (Nét liền tím)</span>
+            </label>
+          </div>
+        </div>
+        <div class="chart-wrapper">
+          <canvas id="mainPriceChart"></canvas>
+        </div>
+      </div>
+
+      <!-- Chart 2: Spread Analysis -->
+      <div class="chart-card half-width">
+        <div class="chart-card-header">
+          <div>
+            <h3><i class="fa-solid fa-chart-area"></i> Biểu Đồ Độ Chênh Lệch Trong Nước vs Thế Giới</h3>
+            <p>Độ chênh lệch giữa Giá Bán Vàng Nhẫn SJC và Vàng Thế Giới (VNĐ/lượng)</p>
+          </div>
+        </div>
+        <div class="chart-wrapper">
+          <canvas id="spreadChart"></canvas>
+        </div>
+      </div>
+
+      <!-- Chart 3: Buy/Sell Spread -->
+      <div class="chart-card half-width">
+        <div class="chart-card-header">
+          <div>
+            <h3><i class="fa-solid fa-chart-bar"></i> Biên Độ Chênh Lệch Mua - Bán SJC</h3>
+            <p>Khoảng chênh lệch Mua - Bán của Vàng Nhẫn SJC (VNĐ/lượng)</p>
+          </div>
+        </div>
+        <div class="chart-wrapper">
+          <canvas id="buySellSpreadChart"></canvas>
+        </div>
+      </div>
+    </section>
+
+    <!-- Calculator & Analytics Summary Widget -->
+    <section class="widgets-grid">
+      <!-- Widget 1: Statistics Summary -->
+      <div class="widget-card">
+        <div class="widget-header">
+          <h3><i class="fa-solid fa-calculator"></i> Thống Kê Tổng Quan Trong Kỳ</h3>
+        </div>
+        <div class="stat-list">
+          <div class="stat-row">
+            <span>Giá Cao Nhất (SJC Nhẫn):</span>
+            <strong id="statHighPrice" class="text-gold">---</strong>
+          </div>
+          <div class="stat-row">
+            <span>Giá Thấp Nhất (SJC Nhẫn):</span>
+            <strong id="statLowPrice" class="text-secondary">---</strong>
+          </div>
+          <div class="stat-row">
+            <span>Giá Trung Bình:</span>
+            <strong id="statAvgPrice">---</strong>
+          </div>
+          <div class="stat-row">
+            <span>Chênh Lệch Thế Giới Cao Nhất:</span>
+            <strong id="statMaxSpread" class="text-accent">---</strong>
+          </div>
+          <div class="stat-row">
+            <span>Chênh Lệch Thế Giới Thấp Nhất:</span>
+            <strong id="statMinSpread">---</strong>
+          </div>
+        </div>
+      </div>
+
+      <!-- Widget 2: Investment Converter -->
+      <div class="widget-card">
+        <div class="widget-header">
+          <h3><i class="fa-solid fa-calculator"></i> Công Cụ Quy Đổi & Tính Đầu Tư</h3>
+        </div>
+        <div class="converter-form">
+          <div class="form-row">
+            <label>Nhập số lượng:</label>
+            <div class="input-unit-group">
+              <input type="number" id="inputQuantity" value="1" min="0.1" step="0.1">
+              <select id="unitSelect">
+                <option value="luong">Lượng</option>
+                <option value="chi">Chỉ</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="converter-result">
+            <div class="result-box">
+              <span>Tổng Giá Mua Vào:</span>
+              <strong id="calcBuyTotal">0 VNĐ</strong>
+            </div>
+            <div class="result-box highlighted">
+              <span>Tổng Giá Bán Ra:</span>
+              <strong id="calcSellTotal">0 VNĐ</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Detailed Data Table Section -->
+    <section class="table-section">
+      <div class="table-header-controls">
+        <div class="table-title">
+          <h3><i class="fa-solid fa-table-list"></i> Bảng Dữ Liệu Chi Tiết Giá Vàng</h3>
+          <span class="record-count" id="totalRecordsBadge">0 bản ghi</span>
+        </div>
+
+        <div class="table-search-box">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <input type="text" id="searchInput" placeholder="Tìm kiếm theo ngày, thứ, giá...">
+        </div>
+      </div>
+
+      <div class="table-responsive">
+        <table id="goldDataTable">
+          <thead>
+            <tr>
+              <th>Ngày</th>
+              <th>Thứ</th>
+              <th>Loại Vàng</th>
+              <th>Giá Mua (VNĐ/lượng)</th>
+              <th>Giá Bán (VNĐ/lượng)</th>
+              <th>Chênh Lệch Mua-Bán</th>
+              <th>Giá Thế Giới (USD/oz)</th>
+              <th>Giá TG Quy Đổi (VNĐ)</th>
+              <th>Độ Chênh Lệch với TG</th>
+              <th>SJC Miếng Mua</th>
+              <th>SJC Miếng Bán</th>
+              <th>Cập Nhật</th>
+            </tr>
+          </thead>
+          <tbody id="tableBody">
+            <!-- Dynamic rows will be inserted here -->
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Pagination -->
+      <div class="pagination-container">
+        <div class="rows-per-page">
+          <span>Hiển thị:</span>
+          <select id="pageSizeSelect">
+            <option value="10">10 dòng</option>
+            <option value="25" selected>25 dòng</option>
+            <option value="50">50 dòng</option>
+            <option value="100">100 dòng</option>
+          </select>
+        </div>
+
+        <div class="pagination-controls" id="paginationControls">
+          <!-- Page buttons generated dynamically -->
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="app-footer">
+    <div class="footer-container">
+      <p>© 2026 Antigravity Gold Index Dashboard | Dữ liệu được đồng bộ trực tiếp từ vang.today & file Theo dõi giá vàng.xlsx</p>
+    </div>
+  </footer>
+
+  <!-- Javascript -->
+  <script src="app.js"></script>
+</body>
+</html>
