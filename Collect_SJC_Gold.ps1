@@ -1,6 +1,9 @@
 <#
 .SYNOPSIS
     Thu thập lịch sử giá vàng nhẫn SJC (9999) từ 01/01/2026 đến ngày hiện tại.
+.REMARK
+    [KHÔNG BẮT BUỘC] Kịch bản này chỉ lấy dữ liệu vàng nhẫn SJC.
+    Vui lòng dùng Update_World_Gold.ps1 (kịch bản chính) để lấy đầy đủ cả Vàng SJC và Vàng Thế Giới.
 .DESCRIPTION
     Kịch bản tự động truy xuất dữ liệu lịch sử giá vàng nhẫn SJC theo từng ngày,
     tính toán các chỉ số chênh lệch mua/bán và xuất ra tệp CSV & Excel.

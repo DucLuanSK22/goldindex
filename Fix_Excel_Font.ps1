@@ -1,6 +1,8 @@
 <#
 .SYNOPSIS
     Tạo các file Excel chuẩn tiếng Việt (UTF-16LE, HTML XLS, XLSX) không bị lỗi font khi mở bằng MS Excel.
+.REMARK
+    [KHÔNG BẮT BUỘC] Tính năng này đã được tích hợp trực tiếp vào Update_World_Gold.ps1.
 #>
 
 # 1. Đọc dữ liệu từ CSV hiện tại

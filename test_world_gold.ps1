@@ -1,3 +1,9 @@
+<#
+.SYNOPSIS
+    Script kiểm tra API Giá Vàng Thế Giới.
+.REMARK
+    [KHÔNG BẮT BUỘC] Script kiểm thử dành cho nhà phát triển.
+#>
 $dates = @("2026-01-01", "2026-01-05", "2026-02-15", "2026-05-10", "2026-08-14", "2026-08-15")
 
 foreach ($d in $dates) {

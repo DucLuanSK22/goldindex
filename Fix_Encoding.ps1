@@ -1,4 +1,5 @@
 # Script sửa lỗi phông chữ tiếng Việt cho Gia_Vang_Nhan_SJC_2026.csv và gold_data.json
+# REMARK: [KHÔNG BẮT BUỘC] Kịch bản phụ hỗ trợ chuẩn hóa encoding khi chỉnh sửa dữ liệu thủ công.
 $csvPath = Join-Path $PSScriptRoot "Gia_Vang_Nhan_SJC_2026.csv"
 $jsonPath = Join-Path $PSScriptRoot "gold_data.json"
 

@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Script thu thập lịch sử giá vàng nhẫn SJC 9999 từ 01/01/2026 đến 15/08/2026.
+Script thu thập lịch sử giá vàng nhẫn SJC 9999 từ 01/01/2026 đến ngày hiện tại.
+REMARK: [KHÔNG BẮT BUỘC] Kịch bản Python tùy chọn. Mặc định dự án sử dụng Update_World_Gold.ps1.
 Tác giả: Antigravity AI
 """
 
