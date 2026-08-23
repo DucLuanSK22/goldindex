@@ -189,6 +189,52 @@ function setupEventListeners() {
 
   document.getElementById('btnExport').addEventListener('click', exportToCSV);
 
+  // Live API Sync Button
+  const btnSyncApi = document.getElementById('btnSyncApi');
+  if (btnSyncApi) {
+    btnSyncApi.addEventListener('click', async () => {
+      const originalHtml = btnSyncApi.innerHTML;
+      btnSyncApi.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Đang Cập Nhật...';
+      btnSyncApi.disabled = true;
+
+      try {
+        const response = await fetch('/api/update-gold', { method: 'POST' });
+        const resData = await response.json();
+
+        if (resData.success && resData.fullData) {
+          rawGoldData = resData.fullData;
+          
+          // Sanitize & Clean all text strings in dataset
+          rawGoldData.forEach(item => {
+            item.Loai_Vang = 'Vàng nhẫn SJC 9999';
+            item.Thu = fixDayOfWeekText(item.Thu, item.ISO_Date);
+          });
+
+          // Sort chronologically
+          rawGoldData.sort((a, b) => new Date(a.ISO_Date) - new Date(b.ISO_Date));
+          filteredData = [...rawGoldData];
+
+          // Real-time UI Updates without F5 reload
+          updateDashboardMetrics();
+          renderCharts();
+          updateStatisticsSummary();
+          calculateInvestment();
+          renderTable();
+
+          alert(`⚡ ${resData.message}`);
+        } else {
+          alert(`❌ Lỗi cập nhật: ${resData.message || 'Không có phản hồi'}`);
+        }
+      } catch (err) {
+        console.error('API Sync Error:', err);
+        alert('❌ Không thể kết nối tới Server API.');
+      } finally {
+        btnSyncApi.innerHTML = originalHtml;
+        btnSyncApi.disabled = false;
+      }
+    });
+  }
+
   document.getElementById('inputQuantity').addEventListener('input', calculateInvestment);
   document.getElementById('unitSelect').addEventListener('change', calculateInvestment);
 
