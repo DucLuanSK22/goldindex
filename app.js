@@ -852,13 +852,16 @@ function renderTable() {
     );
   });
 
-  document.getElementById('totalRecordsBadge').innerText = `${tableData.length} bản ghi`;
+  // Sort table data in descending chronological order (Newest date first)
+  const sortedTableData = [...tableData].sort((a, b) => new Date(b.ISO_Date) - new Date(a.ISO_Date));
 
-  const totalPages = Math.ceil(tableData.length / pageSize) || 1;
+  document.getElementById('totalRecordsBadge').innerText = `${sortedTableData.length} bản ghi`;
+
+  const totalPages = Math.ceil(sortedTableData.length / pageSize) || 1;
   if (currentPage > totalPages) currentPage = totalPages;
 
   const startIndex = (currentPage - 1) * pageSize;
-  const pageData = tableData.slice(startIndex, startIndex + pageSize);
+  const pageData = sortedTableData.slice(startIndex, startIndex + pageSize);
 
   const tbody = document.getElementById('tableBody');
   tbody.innerHTML = '';
