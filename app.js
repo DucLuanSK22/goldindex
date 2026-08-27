@@ -720,23 +720,54 @@ function renderCharts() {
         data: spreadWorldPrices,
         borderColor: '#10B981',
         backgroundColor: gradientSpread,
-        borderWidth: 2,
+        borderWidth: 2.5,
         fill: true,
         tension: 0.3,
-        pointRadius: 0
+        pointRadius: labels.length > 50 ? 0 : 3,
+        pointHoverRadius: 6,
+        pointHoverBackgroundColor: '#10B981',
+        pointHoverBorderColor: '#FFFFFF',
+        pointHoverBorderWidth: 2
       }]
     },
     options: {
       responsive: true,
       maintainAspectRatio: false,
+      interaction: { mode: 'index', intersect: false },
       plugins: {
         legend: { display: false },
         tooltip: {
+          padding: 14,
           backgroundColor: tooltipBg,
-          titleColor: tooltipTitle,
+          titleColor: '#10B981',
+          titleFont: { size: 14, weight: 'bold' },
           bodyColor: tooltipBody,
+          bodyFont: { size: 13 },
+          borderColor: 'rgba(16, 185, 129, 0.4)',
+          borderWidth: 1,
           callbacks: {
-            label: (ctx) => `Chênh lệch: +${formatVND(ctx.raw)} đ/lượng`
+            title: (items) => {
+              if (!items || items.length === 0) return '';
+              const idx = items[0].dataIndex;
+              const dataItem = filteredData[idx];
+              return dataItem ? `${dataItem.Ngay} (${dataItem.Thu || ''})` : '';
+            },
+            label: (ctx) => {
+              const idx = ctx.dataIndex;
+              const dataItem = filteredData[idx];
+              if (!dataItem) return `Chênh lệch: +${formatVND(ctx.raw)} đ/lượng`;
+              const ringPrice = dataItem.Gia_Ban_VND_Luong;
+              const worldPrice = dataItem.Gia_The_Gioi_VND_Luong;
+              const worldUsd = dataItem.Gia_The_Gioi_USD_oz;
+              const diff = ringPrice - worldPrice;
+              const diffPct = worldPrice > 0 ? (diff / worldPrice) * 100 : 0;
+
+              return [
+                `⚡ Độ chênh lệch: +${formatVND(diff)} đ/lượng (+${diffPct.toFixed(2)}%)`,
+                `• SJC Nhẫn bán ra: ${formatVND(ringPrice)} đ/lượng`,
+                `• Vàng thế giới: ${formatVND(worldPrice)} đ/lượng ($${formatUSD(worldUsd)}/oz)`
+              ];
+            }
           }
         }
       },
@@ -767,20 +798,42 @@ function renderCharts() {
         backgroundColor: 'rgba(212, 175, 55, 0.4)',
         borderColor: '#D4AF37',
         borderWidth: 1,
-        borderRadius: 4
+        borderRadius: 4,
+        hoverBackgroundColor: 'rgba(212, 175, 55, 0.8)'
       }]
     },
     options: {
       responsive: true,
       maintainAspectRatio: false,
+      interaction: { mode: 'index', intersect: false },
       plugins: {
         legend: { display: false },
         tooltip: {
+          padding: 14,
           backgroundColor: tooltipBg,
           titleColor: tooltipTitle,
+          titleFont: { size: 14, weight: 'bold' },
           bodyColor: tooltipBody,
+          bodyFont: { size: 13 },
+          borderColor: 'rgba(212, 175, 55, 0.3)',
+          borderWidth: 1,
           callbacks: {
-            label: (ctx) => `Chênh lệch Mua-Bán: ${formatVND(ctx.raw)} đ`
+            title: (items) => {
+              if (!items || items.length === 0) return '';
+              const idx = items[0].dataIndex;
+              const dataItem = filteredData[idx];
+              return dataItem ? `${dataItem.Ngay} (${dataItem.Thu || ''})` : '';
+            },
+            label: (ctx) => {
+              const idx = ctx.dataIndex;
+              const dataItem = filteredData[idx];
+              if (!dataItem) return `Chênh lệch: ${formatVND(ctx.raw)} đ`;
+              return [
+                `🔸 Biên độ Mua - Bán: ${formatVND(dataItem.Chenh_Lech_VND_Luong)} đ/lượng`,
+                `• Giá Mua vào: ${formatVND(dataItem.Gia_Mua_VND_Luong)} đ/lượng`,
+                `• Giá Bán ra:  ${formatVND(dataItem.Gia_Ban_VND_Luong)} đ/lượng`
+              ];
+            }
           }
         }
       },
