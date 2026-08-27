@@ -1,4 +1,5 @@
-# Script hợp nhất 4 file Excel/CSV thành 1 file Excel duy nhất: Gia_Vang_Nhan_SJC_2026.xlsx (chứa 3 Worksheets)
+﻿$OutputEncoding = [System.Text.Encoding]::UTF8
+[Console]::OutputEncoding = [System.Text.Encoding]::UTF8
 
 $excelFile = Join-Path $PSScriptRoot "Gia_Vang_Nhan_SJC_2026.xlsx"
 $csvFile   = Join-Path $PSScriptRoot "Gia_Vang_Nhan_SJC_2026.csv"

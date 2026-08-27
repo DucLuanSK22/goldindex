@@ -45,13 +45,13 @@ const fixDayOfWeekText = (str, isoDate) => {
 
 // Embedded Recent Dataset for Instant 0.001s Rendering (Guarantees zero blank screen on Netlify)
 const EMBEDDED_GOLD_FALLBACK = [
-  {"Ngay":"10/08/2026","ISO_Date":"2026-08-10","Thu":"Thứ Hai","Loai_Vang":"Vàng nhẫn SJC 9999","Gia_Mua_VND_Luong":140000000,"Gia_Ban_VND_Luong":143000000,"Chenh_Lech_VND_Luong":3000000,"Gia_Mua_VND_Chi":14000000,"Gia_Ban_VND_Chi":14300000,"Gia_The_Gioi_USD_oz":4380.5,"Gia_The_Gioi_VND_Luong":137315443,"Chenh_Lech_The_Gioi":5684557,"SJC_Mieng_Mua":140500000,"SJC_Mieng_Ban":143500000,"Cap_Nhat_Luc":"23:30"},
-  {"Ngay":"12/08/2026","ISO_Date":"2026-08-12","Thu":"Thứ Tư","Loai_Vang":"Vàng nhẫn SJC 9999","Gia_Mua_VND_Luong":140800000,"Gia_Ban_VND_Luong":143800000,"Chenh_Lech_VND_Luong":3000000,"Gia_Mua_VND_Chi":14080000,"Gia_Ban_VND_Chi":14380000,"Gia_The_Gioi_USD_oz":4424.6,"Gia_The_Gioi_VND_Luong":138697846,"Chenh_Lech_The_Gioi":5102154,"SJC_Mieng_Mua":141300000,"SJC_Mieng_Ban":144300000,"Cap_Nhat_Luc":"23:30"},
-  {"Ngay":"14/08/2026","ISO_Date":"2026-08-14","Thu":"Thứ Sáu","Loai_Vang":"Vàng nhẫn SJC 9999","Gia_Mua_VND_Luong":139800000,"Gia_Ban_VND_Luong":142800000,"Chenh_Lech_VND_Luong":3000000,"Gia_Mua_VND_Chi":13980000,"Gia_Ban_VND_Chi":14280000,"Gia_The_Gioi_USD_oz":4388.6,"Gia_The_Gioi_VND_Luong":137569355,"Chenh_Lech_The_Gioi":5230645,"SJC_Mieng_Mua":140300000,"SJC_Mieng_Ban":143300000,"Cap_Nhat_Luc":"23:30"},
-  {"Ngay":"16/08/2026","ISO_Date":"2026-08-16","Thu":"Chủ Nhật","Loai_Vang":"Vàng nhẫn SJC 9999","Gia_Mua_VND_Luong":140500000,"Gia_Ban_VND_Luong":143500000,"Chenh_Lech_VND_Luong":3000000,"Gia_Mua_VND_Chi":14050000,"Gia_Ban_VND_Chi":14350000,"Gia_The_Gioi_USD_oz":4377.6,"Gia_The_Gioi_VND_Luong":137224538,"Chenh_Lech_The_Gioi":6275462,"SJC_Mieng_Mua":141000000,"SJC_Mieng_Ban":144000000,"Cap_Nhat_Luc":"00:00"},
-  {"Ngay":"18/08/2026","ISO_Date":"2026-08-18","Thu":"Thứ Ba","Loai_Vang":"Vàng nhẫn SJC 9999","Gia_Mua_VND_Luong":140800000,"Gia_Ban_VND_Luong":143800000,"Chenh_Lech_VND_Luong":3000000,"Gia_Mua_VND_Chi":14080000,"Gia_Ban_VND_Chi":14380000,"Gia_The_Gioi_USD_oz":4365.7,"Gia_The_Gioi_VND_Luong":136851509,"Chenh_Lech_The_Gioi":6948491,"SJC_Mieng_Mua":141300000,"SJC_Mieng_Ban":144300000,"Cap_Nhat_Luc":"23:30"},
-  {"Ngay":"20/08/2026","ISO_Date":"2026-08-20","Thu":"Thứ Năm","Loai_Vang":"Vàng nhẫn SJC 9999","Gia_Mua_VND_Luong":142500000,"Gia_Ban_VND_Luong":145500000,"Chenh_Lech_VND_Luong":3000000,"Gia_Mua_VND_Chi":14250000,"Gia_Ban_VND_Chi":14550000,"Gia_The_Gioi_USD_oz":4533.9,"Gia_The_Gioi_VND_Luong":142124071,"Chenh_Lech_The_Gioi":3375929,"SJC_Mieng_Mua":143000000,"SJC_Mieng_Ban":146000000,"Cap_Nhat_Luc":"22:30"},
-  {"Ngay":"23/08/2026","ISO_Date":"2026-08-23","Thu":"Chủ Nhật","Loai_Vang":"Vàng nhẫn SJC 9999","Gia_Mua_VND_Luong":144100000,"Gia_Ban_VND_Luong":147100000,"Chenh_Lech_VND_Luong":3000000,"Gia_Mua_VND_Chi":14410000,"Gia_Ban_VND_Chi":14710000,"Gia_The_Gioi_USD_oz":4604.4,"Gia_The_Gioi_VND_Luong":144334033,"Chenh_Lech_The_Gioi":2765967,"SJC_Mieng_Mua":144600000,"SJC_Mieng_Ban":147600000,"Cap_Nhat_Luc":"00:00"}
+  {"Ngay":"22/08/2026","ISO_Date":"2026-08-22","Thu":"Thứ Bảy","Loai_Vang":"Vàng nhẫn SJC 9999","Gia_Mua_VND_Luong":144100000,"Gia_Ban_VND_Luong":147100000,"Chenh_Lech_VND_Luong":3000000,"Gia_Mua_VND_Chi":14410000,"Gia_Ban_VND_Chi":14710000,"Gia_The_Gioi_USD_oz":4604.4,"Gia_The_Gioi_VND_Luong":144334033,"Chenh_Lech_The_Gioi":2765967,"SJC_Mieng_Mua":144600000,"SJC_Mieng_Ban":147600000,"Cap_Nhat_Luc":"11:00"},
+  {"Ngay":"23/08/2026","ISO_Date":"2026-08-23","Thu":"Chủ Nhật","Loai_Vang":"Vàng nhẫn SJC 9999","Gia_Mua_VND_Luong":144100000,"Gia_Ban_VND_Luong":147100000,"Chenh_Lech_VND_Luong":3000000,"Gia_Mua_VND_Chi":14410000,"Gia_Ban_VND_Chi":14710000,"Gia_The_Gioi_USD_oz":4604.4,"Gia_The_Gioi_VND_Luong":144334033,"Chenh_Lech_The_Gioi":2765967,"SJC_Mieng_Mua":144600000,"SJC_Mieng_Ban":147600000,"Cap_Nhat_Luc":"00:00"},
+  {"Ngay":"24/08/2026","ISO_Date":"2026-08-24","Thu":"Thứ Hai","Loai_Vang":"Vàng nhẫn SJC 9999","Gia_Mua_VND_Luong":146500000,"Gia_Ban_VND_Luong":149500000,"Chenh_Lech_VND_Luong":3000000,"Gia_Mua_VND_Chi":14650000,"Gia_Ban_VND_Chi":14950000,"Gia_The_Gioi_USD_oz":4659.4,"Gia_The_Gioi_VND_Luong":146058117,"Chenh_Lech_The_Gioi":3441883,"SJC_Mieng_Mua":147000000,"SJC_Mieng_Ban":150000000,"Cap_Nhat_Luc":"23:30"},
+  {"Ngay":"25/08/2026","ISO_Date":"2026-08-25","Thu":"Thứ Ba","Loai_Vang":"Vàng nhẫn SJC 9999","Gia_Mua_VND_Luong":147100000,"Gia_Ban_VND_Luong":150100000,"Chenh_Lech_VND_Luong":3000000,"Gia_Mua_VND_Chi":14710000,"Gia_Ban_VND_Chi":15010000,"Gia_The_Gioi_USD_oz":4641.5,"Gia_The_Gioi_VND_Luong":145497006,"Chenh_Lech_The_Gioi":4602994,"SJC_Mieng_Mua":147600000,"SJC_Mieng_Ban":150600000,"Cap_Nhat_Luc":"23:30"},
+  {"Ngay":"26/08/2026","ISO_Date":"2026-08-26","Thu":"Thứ Tư","Loai_Vang":"Vàng nhẫn SJC 9999","Gia_Mua_VND_Luong":146800000,"Gia_Ban_VND_Luong":149800000,"Chenh_Lech_VND_Luong":3000000,"Gia_Mua_VND_Chi":14680000,"Gia_Ban_VND_Chi":14980000,"Gia_The_Gioi_USD_oz":4596.5,"Gia_The_Gioi_VND_Luong":144086392,"Chenh_Lech_The_Gioi":5713608,"SJC_Mieng_Mua":147300000,"SJC_Mieng_Ban":150300000,"Cap_Nhat_Luc":"23:30"},
+  {"Ngay":"27/08/2026","ISO_Date":"2026-08-27","Thu":"Thứ Năm","Loai_Vang":"Vàng nhẫn SJC 9999","Gia_Mua_VND_Luong":146500000,"Gia_Ban_VND_Luong":149500000,"Chenh_Lech_VND_Luong":3000000,"Gia_Mua_VND_Chi":14650000,"Gia_Ban_VND_Chi":14950000,"Gia_The_Gioi_USD_oz":4608.9,"Gia_The_Gioi_VND_Luong":144475095,"Chenh_Lech_The_Gioi":5024905,"SJC_Mieng_Mua":147000000,"SJC_Mieng_Ban":150000000,"Cap_Nhat_Luc":"23:30"},
+  {"Ngay":"28/08/2026","ISO_Date":"2026-08-28","Thu":"Thứ Sáu","Loai_Vang":"Vàng nhẫn SJC 9999","Gia_Mua_VND_Luong":146500000,"Gia_Ban_VND_Luong":149500000,"Chenh_Lech_VND_Luong":3000000,"Gia_Mua_VND_Chi":14650000,"Gia_Ban_VND_Chi":14950000,"Gia_The_Gioi_USD_oz":4614.8,"Gia_The_Gioi_VND_Luong":144660042,"Chenh_Lech_The_Gioi":4839958,"SJC_Mieng_Mua":147000000,"SJC_Mieng_Ban":150000000,"Cap_Nhat_Luc":"00:00"}
 ];
 
 // Initialize Application
@@ -741,7 +741,7 @@ function renderCharts() {
         }
       },
       scales: {
-        x: { grid: { display: false }, ticks: { color: tickColor } },
+        x: { grid: { display: false }, ticks: { color: tickColor, maxTicksLimit: 12 } },
         y: {
           grid: { color: gridColor },
           ticks: {
@@ -785,7 +785,7 @@ function renderCharts() {
         }
       },
       scales: {
-        x: { grid: { display: false }, ticks: { color: tickColor } },
+        x: { grid: { display: false }, ticks: { color: tickColor, maxTicksLimit: 12 } },
         y: {
           grid: { color: gridColor },
           ticks: {

@@ -45,7 +45,12 @@ Hệ thống theo dõi, cập nhật và phân tích chỉ số **Giá Vàng Vi�
 
 ## 🔄 Hướng Dẫn Cập Nhật Dữ Liệu Giá Vàng Mới
 
-Chạy kịch bản PowerShell để tự động thu thập từ API và đồng bộ toàn bộ file:
+### Cách 1: Sử dụng File Batch (Click đúp chuột để chạy ngay trên Windows)
+- **`Cap_Nhat_Gia_Vang.bat`**: Bảng điều khiển menu tổng hợp (Tự động cập nhật, Nhập tay, Hợp nhất Excel, Mở Web Dashboard).
+- **`Cap_Nhat_Tu_Dong.bat`**: 1-Click tự động lấy dữ liệu mới nhất từ API và cập nhật tất cả file.
+- **`Nhap_Gia_Vang_Thu_Cong.bat`**: 1-Click để nhập giá vàng thủ công bằng tay.
+
+### Cách 2: Chạy trực tiếp kịch bản PowerShell
 ```powershell
 powershell -ExecutionPolicy Bypass -File Update_World_Gold.ps1
 ```
@@ -56,6 +61,11 @@ powershell -ExecutionPolicy Bypass -File Update_World_Gold.ps1
 
 ```
 Gold/
+├── ⚡ Nhóm File Batch 1-Click (Dễ dùng nhất)
+│   ├── Cap_Nhat_Gia_Vang.bat           # Menu tổng hợp mọi tính năng
+│   ├── Cap_Nhat_Tu_Dong.bat            # 1-Click tự động lấy giá mới từ API
+│   └── Nhap_Gia_Vang_Thu_Cong.bat      # 1-Click nhập tay giá vàng tùy chỉnh
+│
 ├── 🌐 Nhóm Web Application (Bắt buộc)
 │   ├── index.html                      # Giao diện Web Dashboard chính
 │   ├── styles.css                      # Styling Dark Gold Metallic & Glassmorphic
