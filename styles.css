@@ -692,6 +692,104 @@ body {
   height: 340px;
 }
 
+/* Custom Glassmorphism Tooltip for Chart.js */
+.chartjs-custom-tooltip {
+  position: absolute;
+  pointer-events: none;
+  background: rgba(10, 15, 29, 0.96);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: var(--radius-md);
+  padding: 12px 16px;
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.7), 0 0 15px rgba(212, 175, 55, 0.15);
+  font-family: var(--font-body);
+  font-size: 13px;
+  min-width: 250px;
+  z-index: 1000;
+  transition: opacity 0.15s ease, transform 0.08s ease;
+  opacity: 0;
+}
+
+.chartjs-custom-tooltip .tooltip-header {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  padding-bottom: 6px;
+  margin-bottom: 8px;
+}
+
+.chartjs-custom-tooltip .tooltip-title {
+  color: #FFFFFF;
+  font-weight: 700;
+  font-size: 13px;
+}
+
+.chartjs-custom-tooltip .tooltip-body {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.chartjs-custom-tooltip .tooltip-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 14px;
+}
+
+.chartjs-custom-tooltip .tooltip-label {
+  color: #FFFFFF !important;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+}
+
+.chartjs-custom-tooltip .green-number {
+  color: #10B981 !important;
+  font-weight: 700;
+  white-space: nowrap;
+  font-family: var(--font-heading);
+}
+
+.chartjs-custom-tooltip .tooltip-divider {
+  border-top: 1px dashed rgba(255, 255, 255, 0.15);
+  margin-top: 4px;
+  padding-top: 6px;
+}
+
+.chartjs-custom-tooltip .color-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+.chartjs-custom-tooltip .ring-dot { background: var(--gold-light); }
+.chartjs-custom-tooltip .bar-dot { background: var(--cyan-blue); }
+.chartjs-custom-tooltip .world-dot { background: var(--purple-accent); }
+
+/* Light Theme Tooltip */
+body.light-theme .chartjs-custom-tooltip {
+  background: rgba(255, 255, 255, 0.98);
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.18);
+}
+body.light-theme .chartjs-custom-tooltip .tooltip-header {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+}
+body.light-theme .chartjs-custom-tooltip .tooltip-title {
+  color: #0F172A;
+}
+body.light-theme .chartjs-custom-tooltip .tooltip-label {
+  color: #1E293B !important;
+}
+body.light-theme .chartjs-custom-tooltip .green-number {
+  color: #059669 !important;
+}
+body.light-theme .chartjs-custom-tooltip .tooltip-divider {
+  border-top: 1px dashed rgba(0, 0, 0, 0.1);
+}
+
 /* Widgets Grid */
 .widgets-grid {
   display: grid;

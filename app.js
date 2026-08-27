@@ -580,14 +580,138 @@ function updateAllViews() {
   renderTable();
 }
 
+// Helper: Get or Create Custom HTML Tooltip Container
+function getOrCreateCustomTooltip(chart) {
+  let tooltipEl = chart.canvas.parentNode.querySelector('.chartjs-custom-tooltip');
+
+  if (!tooltipEl) {
+    tooltipEl = document.createElement('div');
+    tooltipEl.className = 'chartjs-custom-tooltip';
+    chart.canvas.parentNode.appendChild(tooltipEl);
+  }
+
+  return tooltipEl;
+}
+
+// Custom Tooltip Renderer with Pure White Labels and Emerald Green Numbers
+function customHtmlTooltipHandler(context, chartType) {
+  const { chart, tooltip } = context;
+  const tooltipEl = getOrCreateCustomTooltip(chart);
+
+  if (tooltip.opacity === 0) {
+    tooltipEl.style.opacity = '0';
+    return;
+  }
+
+  if (tooltip.dataPoints && tooltip.dataPoints.length > 0) {
+    const idx = tooltip.dataPoints[0].dataIndex;
+    const item = filteredData[idx];
+    if (!item) return;
+
+    let innerHtml = `
+      <div class="tooltip-header">
+        <span class="tooltip-title">📅 ${item.Ngay} (${item.Thu || ''})</span>
+      </div>
+      <div class="tooltip-body">
+    `;
+
+    if (chartType === 'main') {
+      const ringPrice = item.Gia_Ban_VND_Luong;
+      const barPrice = item.SJC_Mieng_Ban;
+      const worldPrice = item.Gia_The_Gioi_VND_Luong;
+      const diff = ringPrice - worldPrice;
+      const diffPct = worldPrice > 0 ? (diff / worldPrice) * 100 : 0;
+
+      innerHtml += `
+        <div class="tooltip-row">
+          <span class="tooltip-label"><span class="color-dot ring-dot"></span> Vàng Nhẫn SJC 9999:</span>
+          <span class="green-number">${formatVND(ringPrice)} đ</span>
+        </div>
+        <div class="tooltip-row">
+          <span class="tooltip-label"><span class="color-dot bar-dot"></span> Vàng Miếng SJC:</span>
+          <span class="green-number">${formatVND(barPrice)} đ</span>
+        </div>
+        <div class="tooltip-row">
+          <span class="tooltip-label"><span class="color-dot world-dot"></span> Vàng Thế Giới (quy đổi):</span>
+          <span class="green-number">${formatVND(worldPrice)} đ</span>
+        </div>
+        <div class="tooltip-row tooltip-divider">
+          <span class="tooltip-label">⚡ Chênh lệch:</span>
+          <span class="green-number">+${formatVND(diff)} đ (+${diffPct.toFixed(2)}%)</span>
+        </div>
+      `;
+    } else if (chartType === 'spread') {
+      const ringPrice = item.Gia_Ban_VND_Luong;
+      const worldPrice = item.Gia_The_Gioi_VND_Luong;
+      const worldUsd = item.Gia_The_Gioi_USD_oz;
+      const diff = ringPrice - worldPrice;
+      const diffPct = worldPrice > 0 ? (diff / worldPrice) * 100 : 0;
+
+      innerHtml += `
+        <div class="tooltip-row">
+          <span class="tooltip-label">⚡ Độ chênh lệch:</span>
+          <span class="green-number">+${formatVND(diff)} đ/lượng</span>
+        </div>
+        <div class="tooltip-row">
+          <span class="tooltip-label">📈 Cao hơn thế giới:</span>
+          <span class="green-number">+${diffPct.toFixed(2)}%</span>
+        </div>
+        <div class="tooltip-row tooltip-divider">
+          <span class="tooltip-label">• SJC Nhẫn bán ra:</span>
+          <span class="green-number">${formatVND(ringPrice)} đ</span>
+        </div>
+        <div class="tooltip-row">
+          <span class="tooltip-label">• Vàng TG quy đổi:</span>
+          <span class="green-number">${formatVND(worldPrice)} đ</span>
+        </div>
+        <div class="tooltip-row">
+          <span class="tooltip-label">• Giá thế giới gốc:</span>
+          <span class="green-number">$${formatUSD(worldUsd)} /oz</span>
+        </div>
+      `;
+    } else if (chartType === 'buysell') {
+      innerHtml += `
+        <div class="tooltip-row">
+          <span class="tooltip-label">🔸 Biên độ Mua - Bán:</span>
+          <span class="green-number">${formatVND(item.Chenh_Lech_VND_Luong)} đ/lượng</span>
+        </div>
+        <div class="tooltip-row">
+          <span class="tooltip-label">• Giá Mua vào:</span>
+          <span class="green-number">${formatVND(item.Gia_Mua_VND_Luong)} đ</span>
+        </div>
+        <div class="tooltip-row">
+          <span class="tooltip-label">• Giá Bán ra:</span>
+          <span class="green-number">${formatVND(item.Gia_Ban_VND_Luong)} đ</span>
+        </div>
+      `;
+    }
+
+    innerHtml += `</div>`;
+    tooltipEl.innerHTML = innerHtml;
+  }
+
+  const { offsetLeft: positionX, offsetTop: positionY } = chart.canvas;
+  tooltipEl.style.opacity = '1';
+
+  const parentWidth = chart.canvas.parentNode.offsetWidth;
+  let left = positionX + tooltip.caretX + 16;
+  if (left + 280 > parentWidth) {
+    left = positionX + tooltip.caretX - 290;
+  }
+  if (left < 10) left = 10;
+
+  let top = positionY + tooltip.caretY - 50;
+  if (top < 10) top = 10;
+
+  tooltipEl.style.left = left + 'px';
+  tooltipEl.style.top = top + 'px';
+}
+
 // Render Chart.js Visualizations
 function renderCharts() {
   const isLight = document.body.classList.contains('light-theme');
   const tickColor = isLight ? '#475569' : '#9CA3AF';
   const gridColor = isLight ? 'rgba(0, 0, 0, 0.08)' : 'rgba(255, 255, 255, 0.05)';
-  const tooltipBg = isLight ? 'rgba(255, 255, 255, 0.98)' : 'rgba(9, 13, 22, 0.95)';
-  const tooltipTitle = isLight ? '#B8860B' : '#F5D77F';
-  const tooltipBody = isLight ? '#0F172A' : '#F3F4F6';
 
   const labels = filteredData.map(d => d.Ngay);
   const ringPrices = filteredData.map(d => d.Gia_Ban_VND_Luong);
@@ -618,7 +742,10 @@ function renderCharts() {
           fill: true,
           tension: 0.3,
           pointRadius: labels.length > 50 ? 0 : 3,
-          pointHoverRadius: 6
+          pointHoverRadius: 6,
+          pointHoverBackgroundColor: '#F5D77F',
+          pointHoverBorderColor: '#FFFFFF',
+          pointHoverBorderWidth: 2
         },
         {
           label: 'Vàng Miếng SJC',
@@ -627,17 +754,23 @@ function renderCharts() {
           borderWidth: 2.5,
           tension: 0.3,
           pointRadius: labels.length > 50 ? 0 : 3,
-          pointHoverRadius: 6
+          pointHoverRadius: 6,
+          pointHoverBackgroundColor: '#3B82F6',
+          pointHoverBorderColor: '#FFFFFF',
+          pointHoverBorderWidth: 2
         },
         {
           label: 'Vàng Thế Giới (VND/lượng)',
           data: worldVndPrices,
           borderColor: '#8B5CF6',
-          borderDash: [], // Solid purple line
+          borderDash: [],
           borderWidth: 2.5,
           tension: 0.3,
-          pointRadius: 0,
-          pointHoverRadius: 6
+          pointRadius: labels.length > 50 ? 0 : 3,
+          pointHoverRadius: 6,
+          pointHoverBackgroundColor: '#8B5CF6',
+          pointHoverBorderColor: '#FFFFFF',
+          pointHoverBorderWidth: 2
         }
       ]
     },
@@ -648,32 +781,8 @@ function renderCharts() {
       plugins: {
         legend: { display: false },
         tooltip: {
-          padding: 14,
-          backgroundColor: tooltipBg,
-          titleColor: tooltipTitle,
-          titleFont: { size: 14, weight: 'bold' },
-          bodyColor: tooltipBody,
-          bodyFont: { size: 13 },
-          footerColor: '#10B981',
-          footerFont: { size: 13, weight: 'bold' },
-          borderColor: 'rgba(212, 175, 55, 0.3)',
-          borderWidth: 1,
-          callbacks: {
-            label: (ctx) => `  ${ctx.dataset.label}: ${formatVND(ctx.raw)} đ`,
-            footer: (items) => {
-              if (!items || items.length === 0) return '';
-              const idx = items[0].dataIndex;
-              const dataItem = filteredData[idx];
-              if (!dataItem) return '';
-              
-              const ringPrice = dataItem.Gia_Ban_VND_Luong;
-              const worldPrice = dataItem.Gia_The_Gioi_VND_Luong;
-              const diff = ringPrice - worldPrice;
-              const diffPct = worldPrice > 0 ? (diff / worldPrice) * 100 : 0;
-
-              return `\n⚡ Chênh Lệch SJC Nhẫn vs Thế Giới:\n   +${formatVND(diff)} đ/lượng (+${diffPct.toFixed(2)}%)`;
-            }
-          }
+          enabled: false,
+          external: (context) => customHtmlTooltipHandler(context, 'main')
         }
       },
       scales: {
@@ -737,38 +846,8 @@ function renderCharts() {
       plugins: {
         legend: { display: false },
         tooltip: {
-          padding: 14,
-          backgroundColor: tooltipBg,
-          titleColor: '#10B981',
-          titleFont: { size: 14, weight: 'bold' },
-          bodyColor: tooltipBody,
-          bodyFont: { size: 13 },
-          borderColor: 'rgba(16, 185, 129, 0.4)',
-          borderWidth: 1,
-          callbacks: {
-            title: (items) => {
-              if (!items || items.length === 0) return '';
-              const idx = items[0].dataIndex;
-              const dataItem = filteredData[idx];
-              return dataItem ? `${dataItem.Ngay} (${dataItem.Thu || ''})` : '';
-            },
-            label: (ctx) => {
-              const idx = ctx.dataIndex;
-              const dataItem = filteredData[idx];
-              if (!dataItem) return `Chênh lệch: +${formatVND(ctx.raw)} đ/lượng`;
-              const ringPrice = dataItem.Gia_Ban_VND_Luong;
-              const worldPrice = dataItem.Gia_The_Gioi_VND_Luong;
-              const worldUsd = dataItem.Gia_The_Gioi_USD_oz;
-              const diff = ringPrice - worldPrice;
-              const diffPct = worldPrice > 0 ? (diff / worldPrice) * 100 : 0;
-
-              return [
-                `⚡ Độ chênh lệch: +${formatVND(diff)} đ/lượng (+${diffPct.toFixed(2)}%)`,
-                `• SJC Nhẫn bán ra: ${formatVND(ringPrice)} đ/lượng`,
-                `• Vàng thế giới: ${formatVND(worldPrice)} đ/lượng ($${formatUSD(worldUsd)}/oz)`
-              ];
-            }
-          }
+          enabled: false,
+          external: (context) => customHtmlTooltipHandler(context, 'spread')
         }
       },
       scales: {
@@ -809,32 +888,8 @@ function renderCharts() {
       plugins: {
         legend: { display: false },
         tooltip: {
-          padding: 14,
-          backgroundColor: tooltipBg,
-          titleColor: tooltipTitle,
-          titleFont: { size: 14, weight: 'bold' },
-          bodyColor: tooltipBody,
-          bodyFont: { size: 13 },
-          borderColor: 'rgba(212, 175, 55, 0.3)',
-          borderWidth: 1,
-          callbacks: {
-            title: (items) => {
-              if (!items || items.length === 0) return '';
-              const idx = items[0].dataIndex;
-              const dataItem = filteredData[idx];
-              return dataItem ? `${dataItem.Ngay} (${dataItem.Thu || ''})` : '';
-            },
-            label: (ctx) => {
-              const idx = ctx.dataIndex;
-              const dataItem = filteredData[idx];
-              if (!dataItem) return `Chênh lệch: ${formatVND(ctx.raw)} đ`;
-              return [
-                `🔸 Biên độ Mua - Bán: ${formatVND(dataItem.Chenh_Lech_VND_Luong)} đ/lượng`,
-                `• Giá Mua vào: ${formatVND(dataItem.Gia_Mua_VND_Luong)} đ/lượng`,
-                `• Giá Bán ra:  ${formatVND(dataItem.Gia_Ban_VND_Luong)} đ/lượng`
-              ];
-            }
-          }
+          enabled: false,
+          external: (context) => customHtmlTooltipHandler(context, 'buysell')
         }
       },
       scales: {
