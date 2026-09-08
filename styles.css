@@ -1356,9 +1356,9 @@ tbody tr:hover {
 
 /* Quick Prompts */
 .ai-quick-prompts {
-  padding: 10px 14px;
-  background: rgba(9, 13, 22, 0.6);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  padding: 10px 14px 6px 14px;
+  background: rgba(9, 13, 22, 0.75);
+  border-top: 1px solid rgba(212, 175, 55, 0.15);
   display: flex;
   gap: 8px;
   overflow-x: auto;
