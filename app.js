@@ -394,6 +394,9 @@ function setupEventListeners() {
       renderCharts();
     });
   }
+
+  // Initialize AI Gemini Chatbot
+  initAiChatbot();
 }
 
 // Live Update Handler (Optimized for GitHub Pages & Localhost)
@@ -1086,3 +1089,463 @@ function exportToCSV() {
   link.click();
   document.body.removeChild(link);
 }
+
+// ==========================================================================
+// AI GEMINI CHATBOT CONTROLLER & API INTEGRATION
+// ==========================================================================
+
+const DEFAULT_GEMINI_CONFIG = {
+  type: 'worker',
+  workerUrl: '',
+  apiKey: '',
+  model: 'gemini-1.5-flash'
+};
+
+function getAiConfig() {
+  try {
+    const saved = localStorage.getItem('gold_gemini_config');
+    if (saved) {
+      return { ...DEFAULT_GEMINI_CONFIG, ...JSON.parse(saved) };
+    }
+  } catch (e) {
+    console.error('Error reading gold_gemini_config:', e);
+  }
+  return { ...DEFAULT_GEMINI_CONFIG };
+}
+
+function saveAiConfig(cfg) {
+  try {
+    localStorage.setItem('gold_gemini_config', JSON.stringify(cfg));
+  } catch (e) {
+    console.error('Error saving gold_gemini_config:', e);
+  }
+}
+
+function initAiChatbot() {
+  const fab = document.getElementById('aiChatFab');
+  const widget = document.getElementById('aiChatWidget');
+  const closeBtn = document.getElementById('btnAiClose');
+  const settingsBtn = document.getElementById('btnAiSettings');
+  const clearBtn = document.getElementById('btnAiClear');
+  const settingsModal = document.getElementById('aiSettingsModal');
+  const settingsCloseBtn = document.getElementById('btnAiSettingsClose');
+  const settingsSaveBtn = document.getElementById('btnAiSettingsSave');
+  const sendBtn = document.getElementById('btnAiSend');
+  const userInput = document.getElementById('aiUserInput');
+  const currentModelBadge = document.getElementById('currentModelBadge');
+
+  const radioTypes = document.querySelectorAll('input[name="aiConnectionType"]');
+  const fieldWorker = document.getElementById('fieldWorkerUrl');
+  const fieldDirect = document.getElementById('fieldDirectApiKey');
+  const inputWorker = document.getElementById('inputWorkerUrl');
+  const inputDirect = document.getElementById('inputDirectApiKey');
+  const selectModel = document.getElementById('selectAiModel');
+
+  // Load Initial Settings
+  const currentCfg = getAiConfig();
+  if (currentModelBadge) {
+    currentModelBadge.textContent = currentCfg.model.replace('gemini-', '').replace('-', ' ').toUpperCase();
+  }
+
+  // Toggle Chat Window
+  if (fab && widget) {
+    fab.addEventListener('click', () => {
+      widget.classList.toggle('hidden');
+      if (!widget.classList.contains('hidden')) {
+        userInput?.focus();
+        scrollChatToBottom();
+      }
+    });
+  }
+
+  if (closeBtn && widget) {
+    closeBtn.addEventListener('click', () => {
+      widget.classList.add('hidden');
+    });
+  }
+
+  // Clear Chat History
+  if (clearBtn) {
+    clearBtn.addEventListener('click', () => {
+      const messagesContainer = document.getElementById('aiChatMessages');
+      if (messagesContainer) {
+        messagesContainer.innerHTML = `
+          <div class="ai-message bot">
+            <div class="msg-avatar"><i class="fa-solid fa-robot"></i></div>
+            <div class="msg-content">
+              <p>Xin chào! Tôi là <strong>Trợ lý AI Gemini</strong> chuyên phân tích thị trường Vàng SJC & Thế giới.</p>
+              <p>Đoạn hội thoại đã được làm mới. Hãy nhập câu hỏi hoặc chọn một gợi ý bên trên để bắt đầu phân tích nhé!</p>
+            </div>
+          </div>
+        `;
+      }
+    });
+  }
+
+  // Settings Modal Handlers
+  if (settingsBtn && settingsModal) {
+    settingsBtn.addEventListener('click', () => {
+      const cfg = getAiConfig();
+      radioTypes.forEach(r => {
+        r.checked = (r.value === cfg.type);
+      });
+
+      if (inputWorker) inputWorker.value = cfg.workerUrl || '';
+      if (inputDirect) inputDirect.value = cfg.apiKey || '';
+      if (selectModel) selectModel.value = cfg.model || 'gemini-1.5-flash';
+
+      toggleConfigFields(cfg.type);
+      settingsModal.classList.remove('hidden');
+    });
+  }
+
+  if (settingsCloseBtn && settingsModal) {
+    settingsCloseBtn.addEventListener('click', () => {
+      settingsModal.classList.add('hidden');
+    });
+  }
+
+  radioTypes.forEach(r => {
+    r.addEventListener('change', (e) => {
+      toggleConfigFields(e.target.value);
+    });
+  });
+
+  function toggleConfigFields(type) {
+    if (type === 'worker') {
+      fieldWorker?.classList.remove('hidden');
+      fieldDirect?.classList.add('hidden');
+    } else {
+      fieldWorker?.classList.add('hidden');
+      fieldDirect?.classList.remove('hidden');
+    }
+  }
+
+  if (settingsSaveBtn && settingsModal) {
+    settingsSaveBtn.addEventListener('click', () => {
+      const selectedType = document.querySelector('input[name="aiConnectionType"]:checked')?.value || 'worker';
+      const workerUrl = inputWorker?.value?.trim() || '';
+      const apiKey = inputDirect?.value?.trim() || '';
+      const model = selectModel?.value || 'gemini-1.5-flash';
+
+      saveAiConfig({
+        type: selectedType,
+        workerUrl: workerUrl,
+        apiKey: apiKey,
+        model: model
+      });
+
+      if (currentModelBadge) {
+        currentModelBadge.textContent = model.replace('gemini-', '').replace('-', ' ').toUpperCase();
+      }
+
+      settingsModal.classList.add('hidden');
+      appendBotMessage(`✅ **Đã lưu cấu hình thành công!** Đang kết nối qua *${selectedType === 'worker' ? 'Cloudflare Worker Proxy' : 'Gemini API Trực Tiếp'}* (${model}).`);
+    });
+  }
+
+  // Quick Prompt Chips
+  document.querySelectorAll('.quick-prompt-chip').forEach(chip => {
+    chip.addEventListener('click', (e) => {
+      const promptText = e.currentTarget.getAttribute('data-prompt');
+      if (promptText) {
+        sendAiChatMessage(promptText);
+      }
+    });
+  });
+
+  // Auto-resize textarea & Enter key listener
+  if (userInput) {
+    userInput.addEventListener('input', () => {
+      userInput.style.height = 'auto';
+      userInput.style.height = Math.min(userInput.scrollHeight, 100) + 'px';
+    });
+
+    userInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        sendAiChatMessage();
+      }
+    });
+  }
+
+  if (sendBtn) {
+    sendBtn.addEventListener('click', () => {
+      sendAiChatMessage();
+    });
+  }
+}
+
+// Scroll chat messages to bottom
+function scrollChatToBottom() {
+  const container = document.getElementById('aiChatMessages');
+  if (container) {
+    container.scrollTop = container.scrollHeight;
+  }
+}
+
+// Append User Message to UI
+function appendUserMessage(text) {
+  const messagesContainer = document.getElementById('aiChatMessages');
+  if (!messagesContainer) return;
+
+  const div = document.createElement('div');
+  div.className = 'ai-message user';
+  div.innerHTML = `
+    <div class="msg-avatar"><i class="fa-solid fa-user"></i></div>
+    <div class="msg-content"><p>${escapeHtml(text)}</p></div>
+  `;
+  messagesContainer.appendChild(div);
+  scrollChatToBottom();
+}
+
+// Append Bot Message to UI
+function appendBotMessage(htmlContent) {
+  const messagesContainer = document.getElementById('aiChatMessages');
+  if (!messagesContainer) return;
+
+  const div = document.createElement('div');
+  div.className = 'ai-message bot';
+  div.innerHTML = `
+    <div class="msg-avatar"><i class="fa-solid fa-robot"></i></div>
+    <div class="msg-content">${htmlContent}</div>
+  `;
+  messagesContainer.appendChild(div);
+  scrollChatToBottom();
+}
+
+// Simple HTML Escape helper
+function escapeHtml(str) {
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+}
+
+// Convert Markdown syntax to styled HTML
+function formatMarkdownToHtml(markdown) {
+  if (!markdown) return '';
+
+  let html = markdown;
+
+  // Code blocks
+  html = html.replace(/```([\s\S]*?)```/g, (match, code) => {
+    return `<pre><code>${escapeHtml(code.trim())}</code></pre>`;
+  });
+
+  // Inline code
+  html = html.replace(/`([^`]+)`/g, (match, code) => {
+    return `<code>${escapeHtml(code)}</code>`;
+  });
+
+  // Headers (###, ##, #)
+  html = html.replace(/^### (.*$)/gim, '<h5 style="color:var(--gold-light);margin:8px 0 4px 0;font-weight:700;">$1</h5>');
+  html = html.replace(/^## (.*$)/gim, '<h4 style="color:var(--gold-light);margin:10px 0 4px 0;font-weight:700;">$1</h4>');
+  html = html.replace(/^# (.*$)/gim, '<h3 style="color:var(--gold-light);margin:12px 0 6px 0;font-weight:700;">$1</h3>');
+
+  // Bold (**text** or __text__)
+  html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+  html = html.replace(/__(.*?)__/g, '<strong>$1</strong>');
+
+  // Italic (*text* or _text_)
+  html = html.replace(/\*(.*?)\*/g, '<em>$1</em>');
+
+  // Bullet points
+  const lines = html.split('\n');
+  let inList = false;
+  let formattedLines = [];
+
+  for (let line of lines) {
+    const trimmed = line.trim();
+    if (trimmed.startsWith('- ') || trimmed.startsWith('* ')) {
+      if (!inList) {
+        formattedLines.push('<ul>');
+        inList = true;
+      }
+      formattedLines.push(`<li>${trimmed.substring(2)}</li>`);
+    } else if (/^\d+\.\s/.test(trimmed)) {
+      if (!inList) {
+        formattedLines.push('<ol>');
+        inList = true;
+      }
+      formattedLines.push(`<li>${trimmed.replace(/^\d+\.\s/, '')}</li>`);
+    } else {
+      if (inList) {
+        formattedLines.push('</ul>');
+        inList = false;
+      }
+      if (trimmed.length > 0) {
+        formattedLines.push(`<p>${trimmed}</p>`);
+      }
+    }
+  }
+
+  if (inList) {
+    formattedLines.push('</ul>');
+  }
+
+  return formattedLines.join('');
+}
+
+// Build Contextual Gold Market Summary for System Prompt
+function buildMarketSystemContext() {
+  if (!rawGoldData || rawGoldData.length === 0) {
+    return 'Hiện tại chưa có dữ liệu giá vàng nạp vào hệ thống.';
+  }
+
+  const latest = rawGoldData[rawGoldData.length - 1];
+  const prev = rawGoldData.length > 1 ? rawGoldData[rawGoldData.length - 2] : latest;
+
+  const ringPrices = rawGoldData.slice(-14).map(d => d.Gia_Ban_VND_Luong);
+  const high14d = Math.max(...ringPrices);
+  const low14d = Math.min(...ringPrices);
+
+  return `
+[THÔNG TIN THỊ TRƯỜNG VÀNG THỰC TẾ TRÊN HỆ THỐNG ANTIGRAVITY GOLD INDEX]:
+- Ngày cập nhật mới nhất: ${latest.Ngay} (${latest.Thu}), lúc ${latest.Cap_Nhat_Luc || '23:30'}
+- Vàng Nhẫn SJC 9999: Mua vào ${formatVND(latest.Gia_Mua_VND_Luong)} đ/lượng | Bán ra ${formatVND(latest.Gia_Ban_VND_Luong)} đ/lượng (Chênh lệch mua - bán: ${formatVND(latest.Chenh_Lech_VND_Luong)} đ)
+- Vàng Miếng SJC (L1-L10): Mua vào ${formatVND(latest.SJC_Mieng_Mua)} đ/lượng | Bán ra ${formatVND(latest.SJC_Mieng_Ban)} đ/lượng
+- Giá Vàng Thế Giới (XAU/USD): ${formatUSD(latest.Gia_The_Gioi_USD_oz)} USD/oz
+- Giá Vàng Thế Giới Quy Đổi: ${formatVND(latest.Gia_The_Gioi_VND_Luong)} đ/lượng
+- Độ Chênh Lệch Trong Nước vs Thế Giới: +${formatVND(latest.Chenh_Lech_The_Gioi)} đ/lượng (${latest.Gia_The_Gioi_VND_Luong > 0 ? ((latest.Chenh_Lech_The_Gioi / latest.Gia_The_Gioi_VND_Luong) * 100).toFixed(2) : 0}%)
+- Biên độ dao động 14 ngày gần nhất: Thấp nhất ${formatVND(low14d)} đ/lượng - Cao nhất ${formatVND(high14d)} đ/lượng.
+`;
+}
+
+// Send Message to Gemini AI (Via Cloudflare Worker or Direct API)
+async function sendAiChatMessage(customText = null) {
+  const userInput = document.getElementById('aiUserInput');
+  const typingIndicator = document.getElementById('aiTypingIndicator');
+  const sendBtn = document.getElementById('btnAiSend');
+
+  const textToSend = customText || userInput?.value?.trim();
+  if (!textToSend) return;
+
+  // Clear input box
+  if (userInput && !customText) {
+    userInput.value = '';
+    userInput.style.height = 'auto';
+  }
+
+  // Display User Bubble
+  appendUserMessage(textToSend);
+
+  // Show Typing Indicator
+  if (typingIndicator) typingIndicator.classList.remove('hidden');
+  if (sendBtn) sendBtn.disabled = true;
+  scrollChatToBottom();
+
+  const cfg = getAiConfig();
+
+  // Validate configuration
+  if (cfg.type === 'worker' && !cfg.workerUrl) {
+    if (typingIndicator) typingIndicator.classList.add('hidden');
+    if (sendBtn) sendBtn.disabled = false;
+    appendBotMessage(`
+      <p>⚠️ <strong>Chưa cấu hình URL Cloudflare Worker Proxy!</strong></p>
+      <p>Vui lòng bấm vào nút <strong>Cài đặt (<i class="fa-solid fa-gear"></i>)</strong> góc trên bên phải khung chat để dán URL Worker của bạn hoặc chọn chuyển sang <em>"Gemini API Key Trực Tiếp"</em>.</p>
+    `);
+    return;
+  }
+
+  if (cfg.type === 'direct' && !cfg.apiKey) {
+    if (typingIndicator) typingIndicator.classList.add('hidden');
+    if (sendBtn) sendBtn.disabled = false;
+    appendBotMessage(`
+      <p>⚠️ <strong>Chưa có Google Gemini API Key!</strong></p>
+      <p>Vui lòng bấm vào nút <strong>Cài đặt (<i class="fa-solid fa-gear"></i>)</strong> để nhập API Key hoặc lấy miễn phí tại <a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener">Google AI Studio</a>.</p>
+    `);
+    return;
+  }
+
+  // Prepare System Prompt with live market context
+  const marketContext = buildMarketSystemContext();
+  const systemInstruction = `
+Bạn là "Antigravity Gold Advisor" - Chuyên gia phân tích thị trường vàng, ngoại hối và cố vấn chiến lược đầu tư tài chính chuyên nghiệp tại Việt Nam.
+Hãy trả lời câu hỏi của nhà đầu tư dựa trên dữ liệu thị trường thực tế sau đây:
+${marketContext}
+
+QUY TẮC PHÂN TÍCH:
+1. Luôn sử dụng số liệu thực tế được cung cấp ở trên làm căn cứ.
+2. Trả lời súc tích, chuyên nghiệp, logic, có phân tích cả mặt cơ hội và rủi ro thị trường (Spread trong nước vs thế giới, biên độ mua/bán).
+3. Đưa ra lời khuyên thiết thực, phân bổ danh mục an toàn.
+4. Trình bày rõ ràng, sử dụng định dạng Markdown (gạch đầu dòng, in đậm các ý chính và số liệu).
+`;
+
+  const fullPrompt = `${systemInstruction}\n\n[CÂU HỎI CỦA NGƯỜI DÙNG]: ${textToSend}`;
+
+  try {
+    let aiResponseText = '';
+
+    if (cfg.type === 'worker') {
+      // Call via Cloudflare Worker Proxy
+      const res = await fetch(cfg.workerUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          prompt: fullPrompt,
+          model: cfg.model || 'gemini-1.5-flash'
+        })
+      });
+
+      if (!res.ok) {
+        throw new Error(`Worker phản hồi mã lỗi HTTP ${res.status}: ${res.statusText}`);
+      }
+
+      const resData = await res.json();
+      if (resData.candidates && resData.candidates[0]?.content?.parts?.[0]?.text) {
+        aiResponseText = resData.candidates[0].content.parts[0].text;
+      } else if (resData.error) {
+        throw new Error(typeof resData.error === 'string' ? resData.error : JSON.stringify(resData.error));
+      } else {
+        throw new Error('Dữ liệu phản hồi từ AI không đúng cấu trúc.');
+      }
+
+    } else {
+      // Call Google Gemini API directly
+      const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${cfg.model || 'gemini-1.5-flash'}:generateContent?key=${cfg.apiKey}`;
+      const res = await fetch(endpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          contents: [
+            {
+              parts: [{ text: fullPrompt }]
+            }
+          ]
+        })
+      });
+
+      if (!res.ok) {
+        const errJson = await res.json().catch(() => ({}));
+        throw new Error(errJson.error?.message || `Lỗi HTTP ${res.status}: ${res.statusText}`);
+      }
+
+      const resData = await res.json();
+      if (resData.candidates && resData.candidates[0]?.content?.parts?.[0]?.text) {
+        aiResponseText = resData.candidates[0].content.parts[0].text;
+      } else {
+        throw new Error('Không nhận được nội dung trả lời từ Gemini API.');
+      }
+    }
+
+    // Convert Markdown & Render Message
+    const formattedHtml = formatMarkdownToHtml(aiResponseText);
+    appendBotMessage(formattedHtml);
+
+  } catch (error) {
+    console.error('Gemini AI Error:', error);
+    appendBotMessage(`
+      <p style="color:var(--ruby-red);"><i class="fa-solid fa-triangle-exclamation"></i> <strong>Lỗi kết nối Gemini AI:</strong></p>
+      <p style="font-size:12px;color:var(--text-muted);">${escapeHtml(error.message || 'Không thể kết nối tới máy chủ AI.')}</p>
+      <p style="font-size:12px;">👉 <em>Vui lòng kiểm tra lại URL Cloudflare Worker hoặc API Key trong phần Cài đặt (<i class="fa-solid fa-gear"></i>).</em></p>
+    `);
+  } finally {
+    if (typingIndicator) typingIndicator.classList.add('hidden');
+    if (sendBtn) sendBtn.disabled = false;
+    scrollChatToBottom();
+  }
+}
+

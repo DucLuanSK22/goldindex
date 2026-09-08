@@ -385,6 +385,134 @@
     </div>
   </footer>
 
+  <!-- ==================== AI CHATBOT WIDGET ==================== -->
+  <!-- Floating Action Button (FAB) -->
+  <button id="aiChatFab" class="ai-fab-btn" title="Trợ Lý AI Phân Tích Vàng (Gemini)">
+    <div class="fab-icon-inner">
+      <i class="fa-solid fa-wand-magic-sparkles"></i>
+    </div>
+    <span class="fab-label">Hỏi AI Gemini</span>
+    <span class="fab-badge">AI 1.5</span>
+  </button>
+
+  <!-- AI Chat Widget Box -->
+  <div id="aiChatWidget" class="ai-chat-window hidden">
+    <!-- Chat Header -->
+    <div class="ai-chat-header">
+      <div class="ai-header-left">
+        <div class="ai-avatar">
+          <i class="fa-solid fa-robot"></i>
+          <span class="ai-online-dot"></span>
+        </div>
+        <div class="ai-header-info">
+          <h4>Trợ Lý AI Vàng & Tài Chính</h4>
+          <span class="ai-status-text"><i class="fa-solid fa-bolt"></i> Google Gemini <span id="currentModelBadge">1.5 Flash</span></span>
+        </div>
+      </div>
+      <div class="ai-header-actions">
+        <button id="btnAiSettings" class="ai-icon-btn" title="Cài đặt API / Proxy">
+          <i class="fa-solid fa-gear"></i>
+        </button>
+        <button id="btnAiClear" class="ai-icon-btn" title="Xóa đoạn chat">
+          <i class="fa-solid fa-trash-can"></i>
+        </button>
+        <button id="btnAiClose" class="ai-icon-btn close-btn" title="Thu nhỏ">
+          <i class="fa-solid fa-chevron-down"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Quick Question Chips -->
+    <div class="ai-quick-prompts">
+      <span class="quick-prompt-chip" data-prompt="Phân tích tình hình giá vàng hôm nay và xu hướng sắp tới">📊 Phân tích giá hôm nay</span>
+      <span class="quick-prompt-chip" data-prompt="Độ chênh lệch giá vàng trong nước và thế giới hiện tại có rủi ro không?">⚖️ Phân tích độ chênh lệch</span>
+      <span class="quick-prompt-chip" data-prompt="Có nên mua vàng nhẫn SJC vào thời điểm hiện tại không?">💡 Có nên mua vàng nhẫn?</span>
+      <span class="quick-prompt-chip" data-prompt="Dự báo các yếu tố kinh tế vĩ mô ảnh hưởng tới giá vàng tuần này">🌍 Yếu tố vĩ mô & XAU/USD</span>
+    </div>
+
+    <!-- Chat Messages Area -->
+    <div id="aiChatMessages" class="ai-messages-body">
+      <!-- Default Welcome Message -->
+      <div class="ai-message bot">
+        <div class="msg-avatar"><i class="fa-solid fa-robot"></i></div>
+        <div class="msg-content">
+          <p>Xin chào! Tôi là <strong>Trợ lý AI Gemini</strong> chuyên phân tích thị trường Vàng SJC & Thế giới.</p>
+          <p>Tôi đã tự động nắm bắt toàn bộ dữ liệu giá vàng mới nhất trên hệ thống. Bạn cần tôi phân tích xu hướng, so sánh chênh lệch hay tư vấn chiến lược đầu tư gì không?</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Typing Indicator -->
+    <div id="aiTypingIndicator" class="ai-typing-indicator hidden">
+      <div class="msg-avatar"><i class="fa-solid fa-robot"></i></div>
+      <div class="typing-bubble">
+        <span></span><span></span><span></span>
+      </div>
+    </div>
+
+    <!-- Chat Input Area -->
+    <div class="ai-chat-footer">
+      <div class="ai-input-wrapper">
+        <textarea id="aiUserInput" rows="1" placeholder="Hỏi Gemini về giá vàng, xu hướng, phân tích... (Enter để gửi)"></textarea>
+        <button id="btnAiSend" class="ai-send-btn" title="Gửi câu hỏi">
+          <i class="fa-solid fa-paper-plane"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Settings Modal (Cloudflare Worker Proxy / API Key) -->
+  <div id="aiSettingsModal" class="ai-modal-overlay hidden">
+    <div class="ai-modal-card">
+      <div class="ai-modal-header">
+        <h3><i class="fa-solid fa-sliders"></i> Cài Đặt Kết Nối Gemini AI</h3>
+        <button id="btnAiSettingsClose" class="ai-modal-close"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="ai-modal-body">
+        <div class="form-group">
+          <label>Phương thức kết nối:</label>
+          <div class="radio-group">
+            <label class="radio-label">
+              <input type="radio" name="aiConnectionType" value="worker" checked>
+              <span>Cloudflare Worker Proxy <em>(Bảo mật - Khuyên dùng)</em></span>
+            </label>
+            <label class="radio-label">
+              <input type="radio" name="aiConnectionType" value="direct">
+              <span>Gemini API Key Trực Tiếp <em>(Lưu cục bộ trên trình duyệt)</em></span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Worker Proxy Field -->
+        <div id="fieldWorkerUrl" class="form-group">
+          <label for="inputWorkerUrl">URL Cloudflare Worker Proxy:</label>
+          <input type="text" id="inputWorkerUrl" placeholder="https://gemini-api-proxy.ten-ban.workers.dev" autocomplete="off">
+          <small class="form-hint">Nhập URL Worker bạn đã tạo từ Cloudflare để bảo mật 100% API Key.</small>
+        </div>
+
+        <!-- Direct API Key Field -->
+        <div id="fieldDirectApiKey" class="form-group hidden">
+          <label for="inputDirectApiKey">Google Gemini API Key:</label>
+          <input type="password" id="inputDirectApiKey" placeholder="AIzaSy..." autocomplete="off">
+          <small class="form-hint">Lấy miễn phí tại <a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener">Google AI Studio</a>. Key chỉ được lưu trong LocalStorage của máy bạn.</small>
+        </div>
+
+        <!-- Model Selection -->
+        <div class="form-group">
+          <label for="selectAiModel">Mô hình AI (Model):</label>
+          <select id="selectAiModel">
+            <option value="gemini-1.5-flash" selected>Gemini 1.5 Flash (Tốc độ cao, chuẩn xác, miễn phí)</option>
+            <option value="gemini-1.5-pro">Gemini 1.5 Pro (Phân tích chuyên sâu & phức tạp)</option>
+            <option value="gemini-2.0-flash">Gemini 2.0 Flash (Thế hệ mới siêu nhanh)</option>
+          </select>
+        </div>
+      </div>
+      <div class="ai-modal-footer">
+        <button id="btnAiSettingsSave" class="btn btn-gold"><i class="fa-solid fa-floppy-disk"></i> Lưu Cấu Hình</button>
+      </div>
+    </div>
+  </div>
+
   <!-- Javascript -->
   <script src="app.js"></script>
 </body>
