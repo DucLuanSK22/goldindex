@@ -45,13 +45,16 @@ const fixDayOfWeekText = (str, isoDate) => {
 
 // Embedded Recent Dataset for Instant 0.001s Rendering (Guarantees zero blank screen on Netlify)
 const EMBEDDED_GOLD_FALLBACK = [
-  {"Ngay":"22/08/2026","ISO_Date":"2026-08-22","Thu":"Thứ Bảy","Loai_Vang":"Vàng nhẫn SJC 9999","Gia_Mua_VND_Luong":144100000,"Gia_Ban_VND_Luong":147100000,"Chenh_Lech_VND_Luong":3000000,"Gia_Mua_VND_Chi":14410000,"Gia_Ban_VND_Chi":14710000,"Gia_The_Gioi_USD_oz":4604.4,"Gia_The_Gioi_VND_Luong":144334033,"Chenh_Lech_The_Gioi":2765967,"SJC_Mieng_Mua":144600000,"SJC_Mieng_Ban":147600000,"Cap_Nhat_Luc":"11:00"},
-  {"Ngay":"23/08/2026","ISO_Date":"2026-08-23","Thu":"Chủ Nhật","Loai_Vang":"Vàng nhẫn SJC 9999","Gia_Mua_VND_Luong":144100000,"Gia_Ban_VND_Luong":147100000,"Chenh_Lech_VND_Luong":3000000,"Gia_Mua_VND_Chi":14410000,"Gia_Ban_VND_Chi":14710000,"Gia_The_Gioi_USD_oz":4604.4,"Gia_The_Gioi_VND_Luong":144334033,"Chenh_Lech_The_Gioi":2765967,"SJC_Mieng_Mua":144600000,"SJC_Mieng_Ban":147600000,"Cap_Nhat_Luc":"00:00"},
-  {"Ngay":"24/08/2026","ISO_Date":"2026-08-24","Thu":"Thứ Hai","Loai_Vang":"Vàng nhẫn SJC 9999","Gia_Mua_VND_Luong":146500000,"Gia_Ban_VND_Luong":149500000,"Chenh_Lech_VND_Luong":3000000,"Gia_Mua_VND_Chi":14650000,"Gia_Ban_VND_Chi":14950000,"Gia_The_Gioi_USD_oz":4659.4,"Gia_The_Gioi_VND_Luong":146058117,"Chenh_Lech_The_Gioi":3441883,"SJC_Mieng_Mua":147000000,"SJC_Mieng_Ban":150000000,"Cap_Nhat_Luc":"23:30"},
-  {"Ngay":"25/08/2026","ISO_Date":"2026-08-25","Thu":"Thứ Ba","Loai_Vang":"Vàng nhẫn SJC 9999","Gia_Mua_VND_Luong":147100000,"Gia_Ban_VND_Luong":150100000,"Chenh_Lech_VND_Luong":3000000,"Gia_Mua_VND_Chi":14710000,"Gia_Ban_VND_Chi":15010000,"Gia_The_Gioi_USD_oz":4641.5,"Gia_The_Gioi_VND_Luong":145497006,"Chenh_Lech_The_Gioi":4602994,"SJC_Mieng_Mua":147600000,"SJC_Mieng_Ban":150600000,"Cap_Nhat_Luc":"23:30"},
-  {"Ngay":"26/08/2026","ISO_Date":"2026-08-26","Thu":"Thứ Tư","Loai_Vang":"Vàng nhẫn SJC 9999","Gia_Mua_VND_Luong":146800000,"Gia_Ban_VND_Luong":149800000,"Chenh_Lech_VND_Luong":3000000,"Gia_Mua_VND_Chi":14680000,"Gia_Ban_VND_Chi":14980000,"Gia_The_Gioi_USD_oz":4596.5,"Gia_The_Gioi_VND_Luong":144086392,"Chenh_Lech_The_Gioi":5713608,"SJC_Mieng_Mua":147300000,"SJC_Mieng_Ban":150300000,"Cap_Nhat_Luc":"23:30"},
-  {"Ngay":"27/08/2026","ISO_Date":"2026-08-27","Thu":"Thứ Năm","Loai_Vang":"Vàng nhẫn SJC 9999","Gia_Mua_VND_Luong":146500000,"Gia_Ban_VND_Luong":149500000,"Chenh_Lech_VND_Luong":3000000,"Gia_Mua_VND_Chi":14650000,"Gia_Ban_VND_Chi":14950000,"Gia_The_Gioi_USD_oz":4608.9,"Gia_The_Gioi_VND_Luong":144475095,"Chenh_Lech_The_Gioi":5024905,"SJC_Mieng_Mua":147000000,"SJC_Mieng_Ban":150000000,"Cap_Nhat_Luc":"23:30"},
-  {"Ngay":"28/08/2026","ISO_Date":"2026-08-28","Thu":"Thứ Sáu","Loai_Vang":"Vàng nhẫn SJC 9999","Gia_Mua_VND_Luong":146500000,"Gia_Ban_VND_Luong":149500000,"Chenh_Lech_VND_Luong":3000000,"Gia_Mua_VND_Chi":14650000,"Gia_Ban_VND_Chi":14950000,"Gia_The_Gioi_USD_oz":4614.8,"Gia_The_Gioi_VND_Luong":144660042,"Chenh_Lech_The_Gioi":4839958,"SJC_Mieng_Mua":147000000,"SJC_Mieng_Ban":150000000,"Cap_Nhat_Luc":"00:00"}
+  {"Ngay":"08/09/2026","ISO_Date":"2026-09-08","Thu":"Thứ Ba","Loai_Vang":"Vàng nhẫn SJC 9999","Gia_Mua_VND_Luong":143100000,"Gia_Ban_VND_Luong":146100000,"Chenh_Lech_VND_Luong":3000000,"Gia_Mua_VND_Chi":14310000,"Gia_Ban_VND_Chi":14610000,"Gia_The_Gioi_USD_oz":4392.9,"Gia_The_Gioi_VND_Luong":137704147,"Chenh_Lech_The_Gioi":8395853,"SJC_Mieng_Mua":143600000,"SJC_Mieng_Ban":146600000,"Cap_Nhat_Luc":"23:30"},
+  {"Ngay":"09/09/2026","ISO_Date":"2026-09-09","Thu":"Thứ Tư","Loai_Vang":"Vàng nhẫn SJC 9999","Gia_Mua_VND_Luong":143100000,"Gia_Ban_VND_Luong":146100000,"Chenh_Lech_VND_Luong":3000000,"Gia_Mua_VND_Chi":14310000,"Gia_Ban_VND_Chi":14610000,"Gia_The_Gioi_USD_oz":4403.5,"Gia_The_Gioi_VND_Luong":138036425,"Chenh_Lech_The_Gioi":8063575,"SJC_Mieng_Mua":143600000,"SJC_Mieng_Ban":146600000,"Cap_Nhat_Luc":"23:30"},
+  {"Ngay":"10/09/2026","ISO_Date":"2026-09-10","Thu":"Thứ Năm","Loai_Vang":"Vàng nhẫn SJC 9999","Gia_Mua_VND_Luong":143100000,"Gia_Ban_VND_Luong":146100000,"Chenh_Lech_VND_Luong":3000000,"Gia_Mua_VND_Chi":14310000,"Gia_Ban_VND_Chi":14610000,"Gia_The_Gioi_USD_oz":4363.7,"Gia_The_Gioi_VND_Luong":136788815,"Chenh_Lech_The_Gioi":9311185,"SJC_Mieng_Mua":143600000,"SJC_Mieng_Ban":146600000,"Cap_Nhat_Luc":"23:30"},
+  {"Ngay":"11/09/2026","ISO_Date":"2026-09-11","Thu":"Thứ Sáu","Loai_Vang":"Vàng nhẫn SJC 9999","Gia_Mua_VND_Luong":141900000,"Gia_Ban_VND_Luong":144900000,"Chenh_Lech_VND_Luong":3000000,"Gia_Mua_VND_Chi":14190000,"Gia_Ban_VND_Chi":14490000,"Gia_The_Gioi_USD_oz":4361.5,"Gia_The_Gioi_VND_Luong":136719852,"Chenh_Lech_The_Gioi":8180148,"SJC_Mieng_Mua":142400000,"SJC_Mieng_Ban":145400000,"Cap_Nhat_Luc":"23:30"},
+  {"Ngay":"12/09/2026","ISO_Date":"2026-09-12","Thu":"Thứ Bảy","Loai_Vang":"Vàng nhẫn SJC 9999","Gia_Mua_VND_Luong":142500000,"Gia_Ban_VND_Luong":145500000,"Chenh_Lech_VND_Luong":3000000,"Gia_Mua_VND_Chi":14250000,"Gia_Ban_VND_Chi":14550000,"Gia_The_Gioi_USD_oz":4349.7,"Gia_The_Gioi_VND_Luong":136349958,"Chenh_Lech_The_Gioi":9150042,"SJC_Mieng_Mua":143000000,"SJC_Mieng_Ban":146000000,"Cap_Nhat_Luc":"09:30"},
+  {"Ngay":"13/09/2026","ISO_Date":"2026-09-13","Thu":"Chủ Nhật","Loai_Vang":"Vàng nhẫn SJC 9999","Gia_Mua_VND_Luong":142500000,"Gia_Ban_VND_Luong":145500000,"Chenh_Lech_VND_Luong":3000000,"Gia_Mua_VND_Chi":14250000,"Gia_Ban_VND_Chi":14550000,"Gia_The_Gioi_USD_oz":4349.7,"Gia_The_Gioi_VND_Luong":136349958,"Chenh_Lech_The_Gioi":9150042,"SJC_Mieng_Mua":143000000,"SJC_Mieng_Ban":146000000,"Cap_Nhat_Luc":"14:00"},
+  {"Ngay":"14/09/2026","ISO_Date":"2026-09-14","Thu":"Thứ Hai","Loai_Vang":"Vàng nhẫn SJC 9999","Gia_Mua_VND_Luong":142100000,"Gia_Ban_VND_Luong":145100000,"Chenh_Lech_VND_Luong":3000000,"Gia_Mua_VND_Chi":14210000,"Gia_Ban_VND_Chi":14510000,"Gia_The_Gioi_USD_oz":4304.9,"Gia_The_Gioi_VND_Luong":134945613,"Chenh_Lech_The_Gioi":10154387,"SJC_Mieng_Mua":142600000,"SJC_Mieng_Ban":145600000,"Cap_Nhat_Luc":"23:30"},
+  {"Ngay":"15/09/2026","ISO_Date":"2026-09-15","Thu":"Thứ Ba","Loai_Vang":"Vàng nhẫn SJC 9999","Gia_Mua_VND_Luong":141800000,"Gia_Ban_VND_Luong":144800000,"Chenh_Lech_VND_Luong":3000000,"Gia_Mua_VND_Chi":14180000,"Gia_Ban_VND_Chi":14480000,"Gia_The_Gioi_USD_oz":4296,"Gia_The_Gioi_VND_Luong":134666625,"Chenh_Lech_The_Gioi":10133375,"SJC_Mieng_Mua":142300000,"SJC_Mieng_Ban":145300000,"Cap_Nhat_Luc":"23:30"},
+  {"Ngay":"16/09/2026","ISO_Date":"2026-09-16","Thu":"Thứ Tư","Loai_Vang":"Vàng nhẫn SJC 9999","Gia_Mua_VND_Luong":143000000,"Gia_Ban_VND_Luong":146000000,"Chenh_Lech_VND_Luong":3000000,"Gia_Mua_VND_Chi":14300000,"Gia_Ban_VND_Chi":14600000,"Gia_The_Gioi_USD_oz":4346.5,"Gia_The_Gioi_VND_Luong":136249647,"Chenh_Lech_The_Gioi":9750353,"SJC_Mieng_Mua":143500000,"SJC_Mieng_Ban":146500000,"Cap_Nhat_Luc":"23:30"},
+  {"Ngay":"17/09/2026","ISO_Date":"2026-09-17","Thu":"Thứ Năm","Loai_Vang":"Vàng nhẫn SJC 9999","Gia_Mua_VND_Luong":142300000,"Gia_Ban_VND_Luong":145300000,"Chenh_Lech_VND_Luong":3000000,"Gia_Mua_VND_Chi":14230000,"Gia_Ban_VND_Chi":14530000,"Gia_The_Gioi_USD_oz":4293.1,"Gia_The_Gioi_VND_Luong":134575719,"Chenh_Lech_The_Gioi":10724281,"SJC_Mieng_Mua":142800000,"SJC_Mieng_Ban":145800000,"Cap_Nhat_Luc":"11:30"}
 ];
 
 // Initialize Application
@@ -430,68 +433,82 @@ async function handleLiveUpdate() {
 
     // 2. Client-side direct fetch for GitHub Pages (https://ducluansk22.github.io) and file://
     if (!updateSuccess) {
-      let targetDate = new Date();
-      let isoDate = targetDate.toISOString().substring(0, 10);
-      let displayDate = `${String(targetDate.getDate()).padStart(2,'0')}/${String(targetDate.getMonth()+1).padStart(2,'0')}/${targetDate.getFullYear()}`;
-
-      let apiUrl = `https://www.vang.today/api/prices?date=${isoDate}`;
-      let response = await fetch(apiUrl);
-      let apiResult = await response.json();
-
-      // If today's price is not available yet, try yesterday
-      if (!apiResult.success || !apiResult.prices || !apiResult.prices.SJ9999 || !apiResult.prices.SJ9999.buy) {
-        targetDate.setDate(targetDate.getDate() - 1);
-        isoDate = targetDate.toISOString().substring(0, 10);
-        displayDate = `${String(targetDate.getDate()).padStart(2,'0')}/${String(targetDate.getMonth()+1).padStart(2,'0')}/${targetDate.getFullYear()}`;
-        apiUrl = `https://www.vang.today/api/prices?date=${isoDate}`;
-        response = await fetch(apiUrl);
-        apiResult = await response.json();
+      const latestItem = rawGoldData.length > 0 ? rawGoldData[rawGoldData.length - 1] : null;
+      let curr = new Date();
+      if (latestItem && latestItem.ISO_Date) {
+        curr = new Date(latestItem.ISO_Date);
+        curr.setDate(curr.getDate() + 1);
       }
+      
+      const today = new Date();
+      let daysFetched = 0;
+      let lastSuccessDate = '';
 
-      if (apiResult.success && apiResult.prices && apiResult.prices.SJ9999) {
-        const sjRing = apiResult.prices.SJ9999 || {};
-        const sjcBar = apiResult.prices.SJL1L10 || {};
-        const xau = apiResult.prices.XAUUSD || {};
+      // Loop and fetch every missing day up to today
+      while (curr <= today) {
+        const isoDate = curr.toISOString().substring(0, 10);
+        const displayDate = `${String(curr.getDate()).padStart(2,'0')}/${String(curr.getMonth()+1).padStart(2,'0')}/${curr.getFullYear()}`;
+        const apiUrl = `https://www.vang.today/api/prices?date=${isoDate}`;
 
-        const buyLuong = parseFloat(sjRing.buy) || 0;
-        const sellLuong = parseFloat(sjRing.sell) || 0;
-        const spreadLuong = sellLuong - buyLuong;
-        const worldUsd = parseFloat(xau.buy) || 0;
-        const worldVnd = Math.round((worldUsd * 26000) / 0.829426);
-        const spreadWorld = sellLuong - worldVnd;
+        try {
+          const response = await fetch(apiUrl);
+          const apiResult = await response.json();
 
-        const barBuy = parseFloat(sjcBar.buy) || 0;
-        const barSell = parseFloat(sjcBar.sell) || 0;
-        const updateTime = apiResult.time || `${String(new Date().getHours()).padStart(2,'0')}:${String(new Date().getMinutes()).padStart(2,'0')}`;
-        const dayName = fixDayOfWeekText('', isoDate);
+          if (apiResult.success && apiResult.prices && apiResult.prices.SJ9999 && apiResult.prices.SJ9999.buy) {
+            const sjRing = apiResult.prices.SJ9999 || {};
+            const sjcBar = apiResult.prices.SJL1L10 || {};
+            const xau = apiResult.prices.XAUUSD || {};
 
-        const newRecord = {
-          Ngay: displayDate,
-          ISO_Date: isoDate,
-          Thu: dayName,
-          Loai_Vang: "Vàng nhẫn SJC 9999",
-          Gia_Mua_VND_Luong: buyLuong,
-          Gia_Ban_VND_Luong: sellLuong,
-          Chenh_Lech_VND_Luong: spreadLuong,
-          Gia_Mua_VND_Chi: buyLuong / 10,
-          Gia_Ban_VND_Chi: sellLuong / 10,
-          Gia_The_Gioi_USD_oz: worldUsd,
-          Gia_The_Gioi_VND_Luong: worldVnd,
-          Chenh_Lech_The_Gioi: spreadWorld,
-          SJC_Mieng_Mua: barBuy,
-          SJC_Mieng_Ban: barSell,
-          Cap_Nhat_Luc: updateTime
-        };
+            const buyLuong = parseFloat(sjRing.buy) || 0;
+            const sellLuong = parseFloat(sjRing.sell) || 0;
+            const spreadLuong = sellLuong - buyLuong;
+            const worldUsd = parseFloat(xau.buy) || 0;
+            const worldVnd = Math.round((worldUsd * 26000) / 0.829426);
+            const spreadWorld = sellLuong - worldVnd;
 
-        const existingIdx = rawGoldData.findIndex(item => item.ISO_Date === isoDate);
-        if (existingIdx >= 0) {
-          rawGoldData[existingIdx] = newRecord;
-        } else {
-          rawGoldData.push(newRecord);
+            const barBuy = parseFloat(sjcBar.buy) || 0;
+            const barSell = parseFloat(sjcBar.sell) || 0;
+            const updateTime = apiResult.time || (curr.toDateString() === today.toDateString() ? `${String(new Date().getHours()).padStart(2,'0')}:${String(new Date().getMinutes()).padStart(2,'0')}` : '23:30');
+            const dayName = fixDayOfWeekText('', isoDate);
+
+            const newRecord = {
+              Ngay: displayDate,
+              ISO_Date: isoDate,
+              Thu: dayName,
+              Loai_Vang: "Vàng nhẫn SJC 9999",
+              Gia_Mua_VND_Luong: buyLuong,
+              Gia_Ban_VND_Luong: sellLuong,
+              Chenh_Lech_VND_Luong: spreadLuong,
+              Gia_Mua_VND_Chi: buyLuong / 10,
+              Gia_Ban_VND_Chi: sellLuong / 10,
+              Gia_The_Gioi_USD_oz: worldUsd,
+              Gia_The_Gioi_VND_Luong: worldVnd,
+              Chenh_Lech_The_Gioi: spreadWorld,
+              SJC_Mieng_Mua: barBuy,
+              SJC_Mieng_Ban: barSell,
+              Cap_Nhat_Luc: updateTime
+            };
+
+            const existingIdx = rawGoldData.findIndex(item => item.ISO_Date === isoDate);
+            if (existingIdx >= 0) {
+              rawGoldData[existingIdx] = newRecord;
+            } else {
+              rawGoldData.push(newRecord);
+            }
+
+            daysFetched++;
+            lastSuccessDate = `${displayDate} (${updateTime})`;
+            updateSuccess = true;
+          }
+        } catch (e) {
+          console.warn('Lỗi lấy API ngày ' + isoDate, e);
         }
 
-        updateSuccess = true;
-        successMessage = `Đã cập nhật trực tiếp dữ liệu giá vàng ngày ${displayDate} (${updateTime})!`;
+        curr.setDate(curr.getDate() + 1);
+      }
+
+      if (updateSuccess) {
+        successMessage = `Đã cập nhật liên tục ${daysFetched} ngày mới đến ngày ${lastSuccessDate}!`;
       }
     }
 
@@ -505,6 +522,7 @@ async function handleLiveUpdate() {
       filteredData = [...rawGoldData];
 
       // Update UI components in real-time without reloading
+      populateWeekDropdown();
       updateDashboardMetrics();
       renderCharts();
       updateStatisticsSummary();
@@ -525,7 +543,7 @@ async function handleLiveUpdate() {
   }
 }
 
-// Filter data by time period
+// Filter data by time period (Calendar-based calculation)
 function filterDataByPeriod(period) {
   const customBox = document.getElementById('customDateRangeBox');
 
@@ -540,7 +558,18 @@ function filterDataByPeriod(period) {
     filteredData = [...rawGoldData];
   } else {
     const days = parseInt(period);
-    filteredData = rawGoldData.slice(-days);
+    if (!isNaN(days) && rawGoldData.length > 0) {
+      const latestItem = rawGoldData[rawGoldData.length - 1];
+      const latestDt = new Date(latestItem.ISO_Date);
+      const cutoffDt = new Date(latestDt);
+      cutoffDt.setDate(cutoffDt.getDate() - (days - 1));
+      const cutoffIso = cutoffDt.toISOString().substring(0, 10);
+
+      const byDate = rawGoldData.filter(item => item.ISO_Date >= cutoffIso);
+      filteredData = (byDate.length > 0) ? byDate : rawGoldData.slice(-days);
+    } else {
+      filteredData = [...rawGoldData];
+    }
   }
 
   document.getElementById('monthSelect').value = 'all';

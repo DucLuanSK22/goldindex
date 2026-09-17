@@ -14,7 +14,7 @@ tr:nth-child(even) { background-color: #F2F5F9; }
 </style>
 </head>
 <body>
-<h2>BẢNG GIÁ VÀNG NHẪN SJC 9999 VÀ GIÁ VÀNG THẾ GIỚI (CẬP NHẬT ĐẾN 28/08/2026)</h2>
+<h2>BẢNG GIÁ VÀNG NHẪN SJC 9999 VÀ GIÁ VÀNG THẾ GIỚI (CẬP NHẬT ĐẾN 17/09/2026)</h2>
 <table>
 <thead><tr><th>Ngày</th><th>ISO Date</th><th>Thứ</th><th>Loại Vàng</th><th>Giá Mua (VNĐ/lượng)</th><th>Giá Bán (VNĐ/lượng)</th><th>Chênh Lệch (VNĐ/lượng)</th><th>Giá Mua (VNĐ/chỉ)</th><th>Giá Bán (VNĐ/chỉ)</th><th>Giá Thế Giới (USD/oz)</th><th>SJC Miếng Mua</th><th>SJC Miếng Bán</th><th>Cập Nhật Lúc</th></tr></thead>
 <tbody>
@@ -40217,5 +40217,305 @@ tr:nth-child(even) { background-color: #F2F5F9; }
 <td class="number">147,000,000</td>
 <td class="number">150,000,000</td>
 <td class="text">00:00</td>
+</tr>
+<tr>
+<td class="text">29/08/2026</td>
+<td class="text">2026-08-29</td>
+<td class="text">Thứ Bảy</td>
+<td>Vàng nhẫn SJC 9999</td>
+<td class="number">145,200,000</td>
+<td class="number bold" style="color:#C00000;">148,200,000</td>
+<td class="number">3,000,000</td>
+<td class="number">14,520,000</td>
+<td class="number">14,820,000</td>
+<td class="decimal">4456.4</td>
+<td class="number">145,700,000</td>
+<td class="number">148,700,000</td>
+<td class="text">15:30</td>
+</tr>
+<tr>
+<td class="text">30/08/2026</td>
+<td class="text">2026-08-30</td>
+<td class="text">Chủ Nhật</td>
+<td>Vàng nhẫn SJC 9999</td>
+<td class="number">145,200,000</td>
+<td class="number bold" style="color:#C00000;">148,200,000</td>
+<td class="number">3,000,000</td>
+<td class="number">14,520,000</td>
+<td class="number">14,820,000</td>
+<td class="decimal">4456.4</td>
+<td class="number">145,700,000</td>
+<td class="number">148,700,000</td>
+<td class="text">10:30</td>
+</tr>
+<tr>
+<td class="text">31/08/2026</td>
+<td class="text">2026-08-31</td>
+<td class="text">Thứ Hai</td>
+<td>Vàng nhẫn SJC 9999</td>
+<td class="number">145,200,000</td>
+<td class="number bold" style="color:#C00000;">148,200,000</td>
+<td class="number">3,000,000</td>
+<td class="number">14,520,000</td>
+<td class="number">14,820,000</td>
+<td class="decimal">4437.8</td>
+<td class="number">145,700,000</td>
+<td class="number">148,700,000</td>
+<td class="text">23:30</td>
+</tr>
+<tr>
+<td class="text">01/09/2026</td>
+<td class="text">2026-09-01</td>
+<td class="text">Thứ Ba</td>
+<td>Vàng nhẫn SJC 9999</td>
+<td class="number">145,200,000</td>
+<td class="number bold" style="color:#C00000;">148,200,000</td>
+<td class="number">3,000,000</td>
+<td class="number">14,520,000</td>
+<td class="number">14,820,000</td>
+<td class="decimal">4355.3</td>
+<td class="number">145,700,000</td>
+<td class="number">148,700,000</td>
+<td class="text">23:30</td>
+</tr>
+<tr>
+<td class="text">02/09/2026</td>
+<td class="text">2026-09-02</td>
+<td class="text">Thứ Tư</td>
+<td>Vàng nhẫn SJC 9999</td>
+<td class="number">145,200,000</td>
+<td class="number bold" style="color:#C00000;">148,200,000</td>
+<td class="number">3,000,000</td>
+<td class="number">14,520,000</td>
+<td class="number">14,820,000</td>
+<td class="decimal">4369.8</td>
+<td class="number">145,700,000</td>
+<td class="number">148,700,000</td>
+<td class="text">23:30</td>
+</tr>
+<tr>
+<td class="text">03/09/2026</td>
+<td class="text">2026-09-03</td>
+<td class="text">Thứ Năm</td>
+<td>Vàng nhẫn SJC 9999</td>
+<td class="number">144,900,000</td>
+<td class="number bold" style="color:#C00000;">147,900,000</td>
+<td class="number">3,000,000</td>
+<td class="number">14,490,000</td>
+<td class="number">14,790,000</td>
+<td class="decimal">4493.6</td>
+<td class="number">145,400,000</td>
+<td class="number">148,400,000</td>
+<td class="text">23:30</td>
+</tr>
+<tr>
+<td class="text">04/09/2026</td>
+<td class="text">2026-09-04</td>
+<td class="text">Thứ Sáu</td>
+<td>Vàng nhẫn SJC 9999</td>
+<td class="number">145,100,000</td>
+<td class="number bold" style="color:#C00000;">148,100,000</td>
+<td class="number">3,000,000</td>
+<td class="number">14,510,000</td>
+<td class="number">14,810,000</td>
+<td class="decimal">4436.2</td>
+<td class="number">145,600,000</td>
+<td class="number">148,600,000</td>
+<td class="text">23:30</td>
+</tr>
+<tr>
+<td class="text">05/09/2026</td>
+<td class="text">2026-09-05</td>
+<td class="text">Thứ Bảy</td>
+<td>Vàng nhẫn SJC 9999</td>
+<td class="number">144,100,000</td>
+<td class="number bold" style="color:#C00000;">147,100,000</td>
+<td class="number">3,000,000</td>
+<td class="number">14,410,000</td>
+<td class="number">14,710,000</td>
+<td class="decimal">4431.1</td>
+<td class="number">144,600,000</td>
+<td class="number">147,600,000</td>
+<td class="text">16:00</td>
+</tr>
+<tr>
+<td class="text">06/09/2026</td>
+<td class="text">2026-09-06</td>
+<td class="text">Chủ Nhật</td>
+<td>Vàng nhẫn SJC 9999</td>
+<td class="number">144,100,000</td>
+<td class="number bold" style="color:#C00000;">147,100,000</td>
+<td class="number">3,000,000</td>
+<td class="number">14,410,000</td>
+<td class="number">14,710,000</td>
+<td class="decimal">4431.1</td>
+<td class="number">144,600,000</td>
+<td class="number">147,600,000</td>
+<td class="text">00:00</td>
+</tr>
+<tr>
+<td class="text">07/09/2026</td>
+<td class="text">2026-09-07</td>
+<td class="text">Thứ Hai</td>
+<td>Vàng nhẫn SJC 9999</td>
+<td class="number">143,000,000</td>
+<td class="number bold" style="color:#C00000;">146,000,000</td>
+<td class="number">3,000,000</td>
+<td class="number">14,300,000</td>
+<td class="number">14,600,000</td>
+<td class="decimal">4415.2</td>
+<td class="number">143,500,000</td>
+<td class="number">146,500,000</td>
+<td class="text">23:30</td>
+</tr>
+<tr>
+<td class="text">08/09/2026</td>
+<td class="text">2026-09-08</td>
+<td class="text">Thứ Ba</td>
+<td>Vàng nhẫn SJC 9999</td>
+<td class="number">143,100,000</td>
+<td class="number bold" style="color:#C00000;">146,100,000</td>
+<td class="number">3,000,000</td>
+<td class="number">14,310,000</td>
+<td class="number">14,610,000</td>
+<td class="decimal">4392.9</td>
+<td class="number">143,600,000</td>
+<td class="number">146,600,000</td>
+<td class="text">23:30</td>
+</tr>
+<tr>
+<td class="text">09/09/2026</td>
+<td class="text">2026-09-09</td>
+<td class="text">Thứ Tư</td>
+<td>Vàng nhẫn SJC 9999</td>
+<td class="number">143,100,000</td>
+<td class="number bold" style="color:#C00000;">146,100,000</td>
+<td class="number">3,000,000</td>
+<td class="number">14,310,000</td>
+<td class="number">14,610,000</td>
+<td class="decimal">4403.5</td>
+<td class="number">143,600,000</td>
+<td class="number">146,600,000</td>
+<td class="text">23:30</td>
+</tr>
+<tr>
+<td class="text">10/09/2026</td>
+<td class="text">2026-09-10</td>
+<td class="text">Thứ Năm</td>
+<td>Vàng nhẫn SJC 9999</td>
+<td class="number">143,100,000</td>
+<td class="number bold" style="color:#C00000;">146,100,000</td>
+<td class="number">3,000,000</td>
+<td class="number">14,310,000</td>
+<td class="number">14,610,000</td>
+<td class="decimal">4363.7</td>
+<td class="number">143,600,000</td>
+<td class="number">146,600,000</td>
+<td class="text">23:30</td>
+</tr>
+<tr>
+<td class="text">11/09/2026</td>
+<td class="text">2026-09-11</td>
+<td class="text">Thứ Sáu</td>
+<td>Vàng nhẫn SJC 9999</td>
+<td class="number">141,900,000</td>
+<td class="number bold" style="color:#C00000;">144,900,000</td>
+<td class="number">3,000,000</td>
+<td class="number">14,190,000</td>
+<td class="number">14,490,000</td>
+<td class="decimal">4361.5</td>
+<td class="number">142,400,000</td>
+<td class="number">145,400,000</td>
+<td class="text">23:30</td>
+</tr>
+<tr>
+<td class="text">12/09/2026</td>
+<td class="text">2026-09-12</td>
+<td class="text">Thứ Bảy</td>
+<td>Vàng nhẫn SJC 9999</td>
+<td class="number">142,500,000</td>
+<td class="number bold" style="color:#C00000;">145,500,000</td>
+<td class="number">3,000,000</td>
+<td class="number">14,250,000</td>
+<td class="number">14,550,000</td>
+<td class="decimal">4349.7</td>
+<td class="number">143,000,000</td>
+<td class="number">146,000,000</td>
+<td class="text">09:30</td>
+</tr>
+<tr>
+<td class="text">13/09/2026</td>
+<td class="text">2026-09-13</td>
+<td class="text">Chủ Nhật</td>
+<td>Vàng nhẫn SJC 9999</td>
+<td class="number">142,500,000</td>
+<td class="number bold" style="color:#C00000;">145,500,000</td>
+<td class="number">3,000,000</td>
+<td class="number">14,250,000</td>
+<td class="number">14,550,000</td>
+<td class="decimal">4349.7</td>
+<td class="number">143,000,000</td>
+<td class="number">146,000,000</td>
+<td class="text">14:00</td>
+</tr>
+<tr>
+<td class="text">14/09/2026</td>
+<td class="text">2026-09-14</td>
+<td class="text">Thứ Hai</td>
+<td>Vàng nhẫn SJC 9999</td>
+<td class="number">142,100,000</td>
+<td class="number bold" style="color:#C00000;">145,100,000</td>
+<td class="number">3,000,000</td>
+<td class="number">14,210,000</td>
+<td class="number">14,510,000</td>
+<td class="decimal">4304.9</td>
+<td class="number">142,600,000</td>
+<td class="number">145,600,000</td>
+<td class="text">23:30</td>
+</tr>
+<tr>
+<td class="text">15/09/2026</td>
+<td class="text">2026-09-15</td>
+<td class="text">Thứ Ba</td>
+<td>Vàng nhẫn SJC 9999</td>
+<td class="number">141,800,000</td>
+<td class="number bold" style="color:#C00000;">144,800,000</td>
+<td class="number">3,000,000</td>
+<td class="number">14,180,000</td>
+<td class="number">14,480,000</td>
+<td class="decimal">4296</td>
+<td class="number">142,300,000</td>
+<td class="number">145,300,000</td>
+<td class="text">23:30</td>
+</tr>
+<tr>
+<td class="text">16/09/2026</td>
+<td class="text">2026-09-16</td>
+<td class="text">Thứ Tư</td>
+<td>Vàng nhẫn SJC 9999</td>
+<td class="number">143,000,000</td>
+<td class="number bold" style="color:#C00000;">146,000,000</td>
+<td class="number">3,000,000</td>
+<td class="number">14,300,000</td>
+<td class="number">14,600,000</td>
+<td class="decimal">4346.5</td>
+<td class="number">143,500,000</td>
+<td class="number">146,500,000</td>
+<td class="text">23:30</td>
+</tr>
+<tr>
+<td class="text">17/09/2026</td>
+<td class="text">2026-09-17</td>
+<td class="text">Thứ Năm</td>
+<td>Vàng nhẫn SJC 9999</td>
+<td class="number">142,300,000</td>
+<td class="number bold" style="color:#C00000;">145,300,000</td>
+<td class="number">3,000,000</td>
+<td class="number">14,230,000</td>
+<td class="number">14,530,000</td>
+<td class="decimal">4293.1</td>
+<td class="number">142,800,000</td>
+<td class="number">145,800,000</td>
+<td class="text">11:30</td>
 </tr>
 </tbody></table></body></html>
