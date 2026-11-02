@@ -149,6 +149,8 @@
           <button class="filter-btn" data-period="7">7 Ngày</button>
           <button class="filter-btn" data-period="30">30 Ngày</button>
           <button class="filter-btn" data-period="90">3 Tháng</button>
+          <button class="filter-btn" data-period="180">6 Tháng</button>
+          <button class="filter-btn" data-period="ytd" title="Year-To-Date: từ đầu năm đến nay">YTD</button>
           <button class="filter-btn" data-period="365">1 Năm</button>
           <button class="filter-btn active" data-period="all">Từ 2016 đến nay</button>
           <button class="filter-btn" data-period="custom" id="btnCustomDateRange">
@@ -176,6 +178,10 @@
               <option value="06">Tháng 6</option>
               <option value="07">Tháng 7</option>
               <option value="08">Tháng 8</option>
+              <option value="09">Tháng 9</option>
+              <option value="10">Tháng 10</option>
+              <option value="11">Tháng 11</option>
+              <option value="12">Tháng 12</option>
             </select>
           </div>
         </div>
@@ -190,7 +196,7 @@
           </div>
           <div class="date-input-field">
             <label for="endDatePicker"><i class="fa-solid fa-calendar-day"></i> Đến Ngày:</label>
-            <input type="date" id="endDatePicker" value="2026-08-23" min="2016-01-01">
+            <input type="date" id="endDatePicker" value="2026-11-02" min="2016-01-01">
           </div>
           <button class="btn btn-gold btn-sm" id="btnApplyCustomDate">
             <i class="fa-solid fa-filter"></i> Áp Dụng Lọc Khoảng Ngày

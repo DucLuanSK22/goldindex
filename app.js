@@ -556,6 +556,16 @@ function filterDataByPeriod(period) {
 
   if (period === 'all') {
     filteredData = [...rawGoldData];
+  } else if (period === 'ytd') {
+    // Year-To-Date: từ 01/01 của năm chứa ngày dữ liệu mới nhất đến ngày mới nhất
+    if (rawGoldData.length > 0) {
+      const latestYear = rawGoldData[rawGoldData.length - 1].ISO_Date.substring(0, 4);
+      const ytdStart = `${latestYear}-01-01`;
+      const ytdData = rawGoldData.filter(item => item.ISO_Date >= ytdStart);
+      filteredData = ytdData.length > 0 ? ytdData : [...rawGoldData];
+    } else {
+      filteredData = [...rawGoldData];
+    }
   } else {
     const days = parseInt(period);
     if (!isNaN(days) && rawGoldData.length > 0) {
