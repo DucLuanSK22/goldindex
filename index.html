@@ -203,6 +203,78 @@
           </button>
         </div>
       </div>
+
+      <!-- Filter Period Statistics Summary Bar -->
+      <div class="filter-stats-banner" id="filterStatsBanner">
+        <div class="filter-stats-header">
+          <div class="filter-stats-title">
+            <i class="fa-solid fa-chart-simple text-gold"></i>
+            <span>Thống kê trong khoảng lọc: <strong id="filterRangeLabel" class="text-gold">Đang tính toán...</strong></span>
+          </div>
+          <span class="filter-asset-badge"><i class="fa-solid fa-ring"></i> Vàng Nhẫn SJC 9999 (Bán ra)</span>
+        </div>
+
+        <div class="filter-stats-grid">
+          <!-- Min Price Card -->
+          <div class="filter-stat-card card-min">
+            <div class="stat-card-icon">
+              <i class="fa-solid fa-arrow-trend-down"></i>
+            </div>
+            <div class="stat-card-content">
+              <span class="stat-card-label">GIÁ THẤP NHẤT</span>
+              <div class="stat-card-value">
+                <span id="filterMinPrice">---</span>
+                <span class="stat-unit">đ/lượng</span>
+              </div>
+              <span class="stat-card-date" id="filterMinDate">Ngày: ---</span>
+            </div>
+          </div>
+
+          <!-- Avg Price Card -->
+          <div class="filter-stat-card card-avg">
+            <div class="stat-card-icon">
+              <i class="fa-solid fa-scale-balanced"></i>
+            </div>
+            <div class="stat-card-content">
+              <span class="stat-card-label">GIÁ TRUNG BÌNH</span>
+              <div class="stat-card-value">
+                <span id="filterAvgPrice">---</span>
+                <span class="stat-unit">đ/lượng</span>
+              </div>
+              <span class="stat-card-date" id="filterDaysCount">Trong 0 phiên giao dịch</span>
+            </div>
+          </div>
+
+          <!-- Max Price Card -->
+          <div class="filter-stat-card card-max">
+            <div class="stat-card-icon">
+              <i class="fa-solid fa-arrow-trend-up"></i>
+            </div>
+            <div class="stat-card-content">
+              <span class="stat-card-label">GIÁ CAO NHẤT</span>
+              <div class="stat-card-value">
+                <span id="filterMaxPrice">---</span>
+                <span class="stat-unit">đ/lượng</span>
+              </div>
+              <span class="stat-card-date" id="filterMaxDate">Ngày: ---</span>
+            </div>
+          </div>
+
+          <!-- Spread / Amplitude Card -->
+          <div class="filter-stat-card card-spread">
+            <div class="stat-card-icon">
+              <i class="fa-solid fa-wave-square"></i>
+            </div>
+            <div class="stat-card-content">
+              <span class="stat-card-label">BIÊN ĐỘ DAO ĐỘNG</span>
+              <div class="stat-card-value">
+                <span id="filterSpreadPrice">---</span>
+                <span class="stat-unit">đ/lượng</span>
+              </div>
+              <span class="stat-card-date" id="filterSpreadPct">Biên độ: 0%</span>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -214,6 +286,11 @@
           <div>
             <h3><i class="fa-solid fa-chart-line"></i> Biểu Đồ Diễn Biến Giá Vàng 2026</h3>
             <p>So sánh Giá Vàng Nhẫn SJC 9999, Vàng Miếng SJC và Giá Vàng Thế Giới Quy Đổi (VNĐ/lượng)</p>
+            <div class="chart-quick-stats">
+              <span class="quick-stat-badge min" title="Giá thấp nhất trong khoảng lọc"><i class="fa-solid fa-arrow-down"></i> Thấp nhất: <strong id="chartBadgeMin">---</strong></span>
+              <span class="quick-stat-badge avg" title="Giá trung bình trong khoảng lọc"><i class="fa-solid fa-scale-balanced"></i> Trung bình: <strong id="chartBadgeAvg">---</strong></span>
+              <span class="quick-stat-badge max" title="Giá cao nhất trong khoảng lọc"><i class="fa-solid fa-arrow-up"></i> Cao nhất: <strong id="chartBadgeMax">---</strong></span>
+            </div>
           </div>
           <div class="chart-toggles">
             <label class="custom-checkbox">

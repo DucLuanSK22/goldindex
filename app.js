@@ -6,6 +6,7 @@ let rawGoldData = [];
 let filteredData = [];
 let currentPage = 1;
 let pageSize = 25;
+let currentPeriodLabel = 'Từ 2016 đến nay';
 
 // Chart Instances
 let mainChartInstance = null;
@@ -368,6 +369,11 @@ function setupEventListeners() {
         return item.ISO_Date >= startDate && item.ISO_Date <= endDate;
       });
 
+      currentPeriodLabel = `Tùy chọn (${startDate} ~ ${endDate})`;
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      const btnCustom = document.getElementById('btnCustomDateRange');
+      if (btnCustom) btnCustom.classList.add('active');
+
       document.getElementById('monthSelect').value = 'all';
       document.getElementById('weekSelect').value = 'all';
 
@@ -547,11 +553,23 @@ async function handleLiveUpdate() {
 function filterDataByPeriod(period) {
   const customBox = document.getElementById('customDateRangeBox');
 
+  const periodNames = {
+    '7': '7 Ngày gần nhất',
+    '30': '30 Ngày gần nhất',
+    '90': '3 Tháng gần nhất',
+    '180': '6 Tháng gần nhất',
+    'ytd': 'YTD (Từ đầu năm đến nay)',
+    '365': '1 Năm gần nhất',
+    'all': 'Từ 2016 đến nay'
+  };
+
   if (period === 'custom') {
     if (customBox) customBox.style.display = 'block';
+    currentPeriodLabel = 'Tùy chọn ngày';
     return; // Wait for user to click Apply button
   } else {
     if (customBox) customBox.style.display = 'none';
+    currentPeriodLabel = periodNames[period] || period;
   }
 
   if (period === 'all') {
@@ -608,6 +626,11 @@ function filterDataCustom() {
 
     return matchMonth && matchWeek;
   });
+
+  let labels = [];
+  if (monthVal !== 'all') labels.push(`Tháng ${monthVal}`);
+  if (weekVal !== 'all') labels.push(`Tuần ${weekVal}`);
+  currentPeriodLabel = labels.length > 0 ? labels.join(' - ') : 'Tất cả các tháng/tuần';
 
   document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
 
@@ -948,26 +971,90 @@ function renderCharts() {
   });
 }
 
-// Update Statistics Summary Widget
+// Update Statistics Summary Widget & Filter Period Stats Banner
 function updateStatisticsSummary() {
-  if (!filteredData || filteredData.length === 0) return;
+  if (!filteredData || filteredData.length === 0) {
+    const elFilterMin = document.getElementById('filterMinPrice');
+    const elFilterAvg = document.getElementById('filterAvgPrice');
+    const elFilterMax = document.getElementById('filterMaxPrice');
+    if (elFilterMin) elFilterMin.innerText = '---';
+    if (elFilterAvg) elFilterAvg.innerText = '---';
+    if (elFilterMax) elFilterMax.innerText = '---';
+    return;
+  }
 
-  const ringPrices = filteredData.map(d => d.Gia_Ban_VND_Luong);
-  const spreads = filteredData.map(d => d.Chenh_Lech_The_Gioi);
+  let minItem = null;
+  let maxItem = null;
+  let sumPrice = 0;
+  let validCount = 0;
 
-  const highPrice = Math.max(...ringPrices);
-  const lowPrice = Math.min(...ringPrices);
-  const avgPrice = ringPrices.reduce((a, b) => a + b, 0) / ringPrices.length;
+  filteredData.forEach(item => {
+    const p = parseFloat(item.Gia_Ban_VND_Luong);
+    if (!isNaN(p) && p > 0) {
+      if (!minItem || p < minItem.Gia_Ban_VND_Luong) minItem = item;
+      if (!maxItem || p > maxItem.Gia_Ban_VND_Luong) maxItem = item;
+      sumPrice += p;
+      validCount++;
+    }
+  });
 
-  const maxSpread = Math.max(...spreads);
-  const minSpread = Math.min(...spreads);
+  const highPrice = maxItem ? maxItem.Gia_Ban_VND_Luong : 0;
+  const lowPrice = minItem ? minItem.Gia_Ban_VND_Luong : 0;
+  const avgPrice = validCount > 0 ? Math.round(sumPrice / validCount) : 0;
+  const spreadPrice = highPrice - lowPrice;
+  const spreadPct = lowPrice > 0 ? ((spreadPrice / lowPrice) * 100).toFixed(2) : '0';
 
-  document.getElementById('statHighPrice').innerText = formatVND(highPrice) + ' đ';
-  document.getElementById('statLowPrice').innerText = formatVND(lowPrice) + ' đ';
-  document.getElementById('statAvgPrice').innerText = formatVND(avgPrice) + ' đ';
+  const spreads = filteredData.map(d => d.Chenh_Lech_The_Gioi).filter(s => s !== undefined && !isNaN(s));
+  const maxSpread = spreads.length > 0 ? Math.max(...spreads) : 0;
+  const minSpread = spreads.length > 0 ? Math.min(...spreads) : 0;
 
-  document.getElementById('statMaxSpread').innerText = '+' + formatVND(maxSpread) + ' đ';
-  document.getElementById('statMinSpread').innerText = '+' + formatVND(minSpread) + ' đ';
+  // 1. Cập nhật Widget 1 ở cuối trang
+  const elHigh = document.getElementById('statHighPrice');
+  const elLow = document.getElementById('statLowPrice');
+  const elAvg = document.getElementById('statAvgPrice');
+  const elMaxSpread = document.getElementById('statMaxSpread');
+  const elMinSpread = document.getElementById('statMinSpread');
+
+  if (elHigh) elHigh.innerText = formatVND(highPrice) + ' đ';
+  if (elLow) elLow.innerText = formatVND(lowPrice) + ' đ';
+  if (elAvg) elAvg.innerText = formatVND(avgPrice) + ' đ';
+  if (elMaxSpread) elMaxSpread.innerText = '+' + formatVND(maxSpread) + ' đ';
+  if (elMinSpread) elMinSpread.innerText = '+' + formatVND(minSpread) + ' đ';
+
+  // 2. Cập nhật Khung Thống Kê Khoảng Lọc (Filter Statistics Banner) ngay tại Toolbar
+  const elFilterMin = document.getElementById('filterMinPrice');
+  const elFilterMinDate = document.getElementById('filterMinDate');
+  const elFilterAvg = document.getElementById('filterAvgPrice');
+  const elFilterDays = document.getElementById('filterDaysCount');
+  const elFilterMax = document.getElementById('filterMaxPrice');
+  const elFilterMaxDate = document.getElementById('filterMaxDate');
+  const elFilterSpread = document.getElementById('filterSpreadPrice');
+  const elFilterSpreadPct = document.getElementById('filterSpreadPct');
+  const elFilterLabel = document.getElementById('filterRangeLabel');
+
+  if (elFilterMin) elFilterMin.innerText = formatVND(lowPrice);
+  if (elFilterMinDate) elFilterMinDate.innerText = minItem ? `Đáy: ${minItem.Ngay} (${minItem.Thu || ''})` : '---';
+  if (elFilterAvg) elFilterAvg.innerText = formatVND(avgPrice);
+  if (elFilterDays) elFilterDays.innerText = `Trong ${validCount} phiên giao dịch`;
+  if (elFilterMax) elFilterMax.innerText = formatVND(highPrice);
+  if (elFilterMaxDate) elFilterMaxDate.innerText = maxItem ? `Đỉnh: ${maxItem.Ngay} (${maxItem.Thu || ''})` : '---';
+  if (elFilterSpread) elFilterSpread.innerText = '+' + formatVND(spreadPrice);
+  if (elFilterSpreadPct) elFilterSpreadPct.innerText = `Biên độ: +${spreadPct}%`;
+
+  if (elFilterLabel) {
+    const startDate = filteredData[0]?.Ngay || '';
+    const endDate = filteredData[filteredData.length - 1]?.Ngay || '';
+    elFilterLabel.innerText = `${currentPeriodLabel} (${startDate} ~ ${endDate} • ${validCount} ngày)`;
+  }
+
+  // 3. Cập nhật Thẻ Badges Nhanh trên Tiêu Đề Biểu Đồ Chính
+  const elBadgeMin = document.getElementById('chartBadgeMin');
+  const elBadgeAvg = document.getElementById('chartBadgeAvg');
+  const elBadgeMax = document.getElementById('chartBadgeMax');
+
+  if (elBadgeMin) elBadgeMin.innerText = formatVND(lowPrice) + ' đ';
+  if (elBadgeAvg) elBadgeAvg.innerText = formatVND(avgPrice) + ' đ';
+  if (elBadgeMax) elBadgeMax.innerText = formatVND(highPrice) + ' đ';
 }
 
 // Calculator Investment Function
